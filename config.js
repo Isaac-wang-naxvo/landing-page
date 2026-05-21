@@ -8,7 +8,7 @@ window.CONFIG = {
   // ── Supabase 連線（填你自己的） ───────────────────────────
   supabase: {
     url:      "https://hquzczhzcoygnmninemvp.supabase.co",
-    anon_key: "在這裡貼上你的 anon public key",
+    anon_key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdXpjaHpjb3lnbm1uaW5lbXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNzIwMjQsImV4cCI6MjA5NDc0ODAyNH0.igTevzpprg0W_tb3FgcVt5gILcONWMG1jYAW_p7GhYk",
   },
 
   // ── 主題：切換整體視覺風格 ────────────────────────────────
