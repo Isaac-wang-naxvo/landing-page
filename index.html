@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">載入中...</title>
+  <meta id="meta-desc" name="description" content="" />
+  <meta id="og-title"  property="og:title"       content="" />
+  <meta id="og-desc"   property="og:description"  content="" />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { opacity: 0; transition: opacity .2s; }
+    body.ready { opacity: 1; }
+    .error-toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #ef4444; color: #fff; font-size: 13px; font-weight: 600;
+      padding: 10px 20px; border-radius: 100px;
+      opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 999;
+    }
+    .error-toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="error-toast" id="toast"></div>
+
+<!-- ① Ticker -->
+<div class="ticker-bar" id="ticker-bar" style="display:none">
+  <div class="ticker-inner" id="ticker-text"></div>
+</div>
+
+<!-- ② Nav -->
+<nav class="nav">
+  <div class="nav-logo" id="nav-logo"></div>
+  <div class="nav-live">
+    <div class="live-dot"></div>
+    <span id="nav-slots"></span>
+  </div>
+</nav>
+
+<!-- ③ Hero -->
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span id="hero-badge"></span>
+    </div>
+    <h1 id="hero-h1"></h1>
+    <p class="hero-sub" id="hero-sub"></p>
+    <div class="cta-row">
+      <button class="btn-main" id="btn-main" onclick="scrollToForm()"></button>
+      <a class="btn-ghost" id="btn-ghost" style="display:none" href="#"></a>
+    </div>
+    <div class="social-row" id="social-row" style="display:none">
+      <div class="avatars" id="avatars"></div>
+      <span id="social-text"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ④ Slot bar -->
+<div class="wrap">
+  <div class="slot-wrap">
+    <div class="slot-card">
+      <div class="slot-info">
+        <div class="slot-nums">
+          <span id="slot-left"></span>
+          <span class="slot-taken" id="slot-right"></span>
+        </div>
+        <div class="slot-bar">
+          <div class="slot-fill" id="slot-fill"></div>
+        </div>
+      </div>
+      <div class="slot-urgency" id="slot-urgency"></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ⑤ Pain points -->
+<div class="wrap">
+  <div class="section">
+    <div class="sec-label">你有這些困擾嗎？</div>
+    <div class="sec-title">很多人都卡在這裡</div>
+    <div class="grid-3" id="pain-grid"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ⑥ Features -->
+<div class="wrap">
+  <div class="section">
+    <div class="sec-label">為什麼選我們</div>
+    <div class="sec-title">我們怎麼解決？</div>
+    <div class="grid-3" id="feature-grid"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ⑦ Form -->
+<div class="wrap" id="form-section">
+  <div class="form-sec">
+    <div class="form-card" id="form-card"></div>
+  </div>
+</div>
+
+<!-- ⑧ Footer -->
+<footer id="footer"></footer>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  const C  = window.CONFIG;
+  const P  = C.product;
+  const SL = C.slots;
+  const WL = C.waitlist;
+  const TY = C.thankyou;
+
+  // ── 讀 URL 參數 (?p=xxx &utm_source=xxx) ─────────────────
+  const params   = new URLSearchParams(location.search);
+  const paramKey = params.get('p') || 'default';
+  const utmSrc   = params.get('utm_source') || '';
+  const utmCamp  = params.get('utm_campaign') || '';
+
+  // ── Supabase 初始化 ───────────────────────────────────────
+  const sb = supabase.createClient(C.supabase.url, C.supabase.anon_key);
+
+  // ── 記錄 page_view ────────────────────────────────────────
+  sb.from('page_views').insert({
+    param_key: paramKey,
+    utm_source: utmSrc,
+    utm_campaign: utmCamp,
+  }).then(({ error }) => { if (error) console.warn('page_view:', error.message); });
+
+  // ── 主題 ──────────────────────────────────────────────────
+  document.body.setAttribute('data-theme', C.theme);
+
+  // ── SEO ───────────────────────────────────────────────────
+  document.getElementById('page-title').textContent  = P.name + ' — ' + P.tagline;
+  document.getElementById('meta-desc').content       = P.subtext;
+  document.getElementById('og-title').content        = P.headline.replace('\n',' ');
+  document.getElementById('og-desc').content         = P.subtext;
+
+  // ── 名額計算 ──────────────────────────────────────────────
+  const remaining = SL.total - SL.taken;
+  const isFull    = WL.enabled && remaining <= 0;
+  const pct       = Math.min(100, Math.round((SL.taken / SL.total) * 100));
+
+  // ── Ticker ────────────────────────────────────────────────
+  if (remaining > 0) {
+    const msg = `✦ ${P.name} 限額開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 額滿截止 ✦ ${P.name} 限額開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 額滿截止 ✦ `;
+    document.getElementById('ticker-bar').style.display = '';
+    document.getElementById('ticker-text').innerHTML = `<span>${msg}</span><span>${msg}</span>`;
+  }
+
+  // ── Nav ───────────────────────────────────────────────────
+  document.getElementById('nav-logo').textContent  = P.name;
+  document.getElementById('nav-slots').textContent = isFull
+    ? '名額已滿・候補中'
+    : `剩 ${remaining} ${SL.unit}名額`;
+
+  // ── Hero ──────────────────────────────────────────────────
+  document.getElementById('hero-badge').textContent = P.badge;
+  document.getElementById('hero-h1').textContent    = P.headline;
+  document.getElementById('hero-sub').textContent   = P.subtext;
+  document.getElementById('btn-main').textContent   = isFull ? (WL.button || '加入候補') : P.cta_main;
+  if (P.cta_sub && P.demo_url) {
+    const g = document.getElementById('btn-ghost');
+    g.style.display = ''; g.textContent = P.cta_sub; g.href = P.demo_url;
+  }
+
+  // ── Social proof ──────────────────────────────────────────
+  if (C.social_proof?.count) {
+    document.getElementById('social-row').style.display = 'flex';
+    const colors = ['#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899'];
+    const names  = ['王','陳','李','張','林'];
+    const av = document.getElementById('avatars');
+    names.forEach((n,i) => {
+      av.innerHTML += `<div class="av" style="background:${colors[i]}22;color:${colors[i]}">${n}</div>`;
+    });
+    document.getElementById('social-text').textContent =
+      `${C.social_proof.count} ${C.social_proof.unit}`;
+  }
+
+  // ── Slot bar ──────────────────────────────────────────────
+  document.getElementById('slot-left').textContent  = `已預約 ${SL.taken} ${SL.unit}`;
+  document.getElementById('slot-right').textContent = `剩 ${remaining} ${SL.unit}`;
+  setTimeout(() => { document.getElementById('slot-fill').style.width = pct + '%'; }, 300);
+  document.getElementById('slot-urgency').textContent =
+    remaining <= 3  ? `🔴 最後 ${remaining} 名！` :
+    remaining <= 8  ? `🔥 快滿了！` :
+    pct >= 60       ? `已搶訂 ${pct}%` : `開放中`;
+
+  // ── Pain cards ────────────────────────────────────────────
+  C.pains.forEach(p => {
+    document.getElementById('pain-grid').innerHTML += `
+      <div class="card">
+        <div class="card-icon">${p.icon}</div>
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+      </div>`;
+  });
+
+  // ── Feature cards ─────────────────────────────────────────
+  C.features.forEach(f => {
+    document.getElementById('feature-grid').innerHTML += `
+      <div class="card">
+        <div class="card-icon">${f.icon}</div>
+        <h3>${f.title}</h3>
+        <p>${f.desc}</p>
+      </div>`;
+  });
+
+  // ── Toast helper ──────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Form 渲染 ─────────────────────────────────────────────
+  function renderForm(isWaitlist) {
+    const card = document.getElementById('form-card');
+    const cfg  = isWaitlist ? WL : C.form;
+    card.innerHTML = `
+      ${isWaitlist ? '<div style="font-size:38px;margin-bottom:10px">🔔</div>' : ''}
+      <div class="form-title">${isWaitlist ? WL.title : C.form.title}</div>
+      <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，名額確認後 24 小時內通知你。'}</div>
+      <div class="form-row">
+        <input class="form-input" id="f-input" type="text"
+          placeholder="${isWaitlist ? WL.placeholder : C.form.placeholder}"
+          autocomplete="email" />
+        <button class="form-btn" id="f-btn">
+          ${isWaitlist ? WL.button : C.form.button}
+        </button>
+      </div>
+      <p class="form-privacy">${isWaitlist ? WL.note : C.form.privacy}</p>`;
+
+    document.getElementById('f-btn').addEventListener('click', () => handleSubmit(isWaitlist));
+    document.getElementById('f-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleSubmit(isWaitlist);
+    });
+  }
+
+  // ── 送出表單 ──────────────────────────────────────────────
+  async function handleSubmit(isWaitlist) {
+    const input = document.getElementById('f-input');
+    const val   = input.value.trim();
+    if (!val) {
+      input.style.borderColor = '#ef4444';
+      input.focus();
+      return;
+    }
+    const btn = document.getElementById('f-btn');
+    btn.textContent = '送出中...';
+    btn.disabled = true;
+
+    const { error } = await sb.from('leads').insert({
+      param_key:   paramKey,
+      contact:     val,
+      utm_source:  utmSrc,
+      utm_campaign: utmCamp,
+      is_waitlist: isWaitlist,
+    });
+
+    if (error) {
+      showToast('送出失敗，請再試一次');
+      btn.textContent = isWaitlist ? WL.button : C.form.button;
+      btn.disabled = false;
+      return;
+    }
+
+    renderThankyou(isWaitlist);
+  }
+
+  // ── 感謝頁 ────────────────────────────────────────────────
+  function renderThankyou(isWaitlist) {
+    document.getElementById('form-card').innerHTML = `
+      <div class="ty">
+        <div class="ty-emoji">${isWaitlist ? '🔔' : '🎉'}</div>
+        <h2>${TY.title}</h2>
+        <p>${TY.message}</p>
+        ${TY.share ? `
+        <div class="share-row">
+          <button class="share-btn" onclick="doShare()">📤 分享給朋友</button>
+          <button class="share-btn" onclick="copyUrl()">🔗 複製連結</button>
+        </div>` : ''}
+      </div>`;
+  }
+
+  // ── 初始渲染表單 ──────────────────────────────────────────
+  renderForm(isFull);
+
+  // ── Footer ────────────────────────────────────────────────
+  document.getElementById('footer').textContent =
+    `© ${new Date().getFullYear()} ${P.name} · 隱私保護`;
+
+  // ── 追蹤代碼 ──────────────────────────────────────────────
+  if (C.tracking?.ga4) {
+    const s = document.createElement('script');
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${C.tracking.ga4}`;
+    s.async = true; document.head.appendChild(s);
+    const s2 = document.createElement('script');
+    s2.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${C.tracking.ga4}');`;
+    document.head.appendChild(s2);
+  }
+  if (C.tracking?.fb_pixel) {
+    const s = document.createElement('script');
+    s.textContent = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${C.tracking.fb_pixel}');fbq('track','PageView');`;
+    document.head.appendChild(s);
+  }
+
+  // ── Ready ─────────────────────────────────────────────────
+  document.body.classList.add('ready');
+
+  // ── Global helpers ────────────────────────────────────────
+  window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
+  window.doShare = () => navigator.share?.({ title: P.name, text: P.tagline, url: location.href });
+  window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => showToast('連結已複製！'));
+
+})();
+</script>
+</body>
+</html>
