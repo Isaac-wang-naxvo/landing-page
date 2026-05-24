@@ -12,6 +12,7 @@
   <style>
     body { opacity: 0; transition: opacity .2s; }
     body.ready { opacity: 1; }
+
     .error-toast {
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
       background: #ef4444; color: #fff; font-size: 13px; font-weight: 600;
@@ -19,11 +20,64 @@
       opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 999;
     }
     .error-toast.show { opacity: 1; }
+
+    /* ── Demo 比較區塊 ─────────────────────────────── */
+    .demo-section { padding: 0 24px 48px; }
+    .demo-title { text-align: center; font-size: 13px; font-weight: 600; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 16px; }
+    .compare-table {
+      border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+      width: 100%;
+    }
+    .compare-head {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      background: var(--bg3); border-bottom: 1px solid var(--border);
+    }
+    .compare-head div {
+      padding: 10px 14px; font-size: 12px; font-weight: 700;
+      color: var(--text2); letter-spacing: .03em;
+    }
+    .compare-head div:not(:last-child) { border-right: 1px solid var(--border); }
+    .compare-head .col-ai { color: var(--accent); }
+    .compare-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row div {
+      padding: 11px 14px; font-size: 12.5px; color: var(--text2); line-height: 1.5;
+    }
+    .compare-row div:not(:last-child) { border-right: 1px solid var(--border); }
+    .compare-row .task { color: var(--text); font-weight: 500; }
+    .compare-row .col-human { color: #ef4444; }
+    .compare-row .col-ai { color: #22c55e; font-weight: 600; }
+
+    /* ── Founder 區塊 ──────────────────────────────── */
+    .founder-section { padding: 48px 24px; }
+    .founder-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .founder-avatar {
+      width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent-dim); border: 2px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; overflow: hidden;
+    }
+    .founder-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .founder-body {}
+    .founder-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .founder-role { font-size: 11.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; letter-spacing: .03em; }
+    .founder-story { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
+    .founder-img-caption { font-size: 11px; color: var(--text3); margin-top: 10px; }
+    .workflow-img {
+      width: 100%; border-radius: 10px; margin-top: 14px;
+      border: 1px solid var(--border); display: block;
+    }
   </style>
 </head>
 <body>
 
-<!-- Toast -->
 <div class="error-toast" id="toast"></div>
 
 <!-- ① Ticker -->
@@ -80,39 +134,85 @@
 
 <div class="divider"></div>
 
-<!-- ⑤ Pain points -->
+<!-- ⑤ 人類 vs AI 比較表 -->
+<div class="wrap">
+  <div class="demo-section">
+    <div class="demo-title">眼見為憑 — 同一件事，差距有多大？</div>
+    <table class="compare-table" style="border-collapse:collapse;">
+      <div class="compare-head">
+        <div>任務</div>
+        <div>👤 人工處理</div>
+        <div class="col-ai">🤖 AI 自動化</div>
+      </div>
+      <div class="compare-row">
+        <div class="task">LINE 訂單整理</div>
+        <div class="col-human">每天 1–2 小時手動複製</div>
+        <div class="col-ai">秒級自動寫入 Sheet</div>
+      </div>
+      <div class="compare-row">
+        <div class="task">客戶常見問題回覆</div>
+        <div class="col-human">客服盯著螢幕等訊息</div>
+        <div class="col-ai">24 小時即時回覆</div>
+      </div>
+      <div class="compare-row">
+        <div class="task">每週業績報表</div>
+        <div class="col-human">花 3 小時整理 Excel</div>
+        <div class="col-ai">每週一早上自動發送</div>
+      </div>
+      <div class="compare-row">
+        <div class="task">新員工交接</div>
+        <div class="col-human">教 2 週還是會出錯</div>
+        <div class="col-ai">流程固化，永不離職</div>
+      </div>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ⑥ Pain points -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">你有這些困擾嗎？</div>
-    <div class="sec-title">很多人都卡在這裡</div>
+    <div class="sec-title">這些問題正在讓你默默虧錢</div>
     <div class="grid-3" id="pain-grid"></div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ⑥ Features -->
+<!-- ⑦ Features -->
 <div class="wrap">
   <div class="section">
-    <div class="sec-label">為什麼選我們</div>
-    <div class="sec-title">我們怎麼解決？</div>
+    <div class="sec-label">我們怎麼解決</div>
+    <div class="sec-title">上線之後，你的團隊能做什麼？</div>
     <div class="grid-3" id="feature-grid"></div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ⑦ Form -->
+<!-- ⑧ Founder 信任區塊 -->
+<div class="wrap" id="founder-section" style="display:none">
+  <div class="founder-section">
+    <div class="sec-label">開發者筆記</div>
+    <div class="sec-title">為什麼我在做這件事</div>
+    <div class="founder-card" id="founder-card"></div>
+  </div>
+</div>
+
+<div class="divider" id="founder-divider" style="display:none"></div>
+
+<!-- ⑨ Form -->
 <div class="wrap" id="form-section">
   <div class="form-sec">
     <div class="form-card" id="form-card"></div>
   </div>
 </div>
 
-<!-- ⑧ Footer -->
+<!-- ⑩ Footer -->
 <footer id="footer"></footer>
 
-<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script>
@@ -122,51 +222,42 @@
   const SL = C.slots;
   const WL = C.waitlist;
   const TY = C.thankyou;
+  const FD = C.founder;
 
-  // ── 讀 URL 參數 (?p=xxx &utm_source=xxx) ─────────────────
   const params   = new URLSearchParams(location.search);
   const paramKey = params.get('p') || 'default';
   const utmSrc   = params.get('utm_source') || '';
   const utmCamp  = params.get('utm_campaign') || '';
 
-  // ── Supabase 初始化 ───────────────────────────────────────
   const sb = supabase.createClient(C.supabase.url, C.supabase.anon_key);
 
-  // ── 記錄 page_view ────────────────────────────────────────
   sb.from('page_views').insert({
-    param_key: paramKey,
-    utm_source: utmSrc,
-    utm_campaign: utmCamp,
-  }).then(({ error }) => { if (error) console.warn('page_view:', error.message); });
+    param_key: paramKey, utm_source: utmSrc, utm_campaign: utmCamp,
+  }).then(({ error }) => { if (error) console.warn('pv:', error.message); });
 
-  // ── 主題 ──────────────────────────────────────────────────
   document.body.setAttribute('data-theme', C.theme);
 
-  // ── SEO ───────────────────────────────────────────────────
   document.getElementById('page-title').textContent  = P.name + ' — ' + P.tagline;
   document.getElementById('meta-desc').content       = P.subtext;
   document.getElementById('og-title').content        = P.headline.replace('\n',' ');
   document.getElementById('og-desc').content         = P.subtext;
 
-  // ── 名額計算 ──────────────────────────────────────────────
   const remaining = SL.total - SL.taken;
   const isFull    = WL.enabled && remaining <= 0;
   const pct       = Math.min(100, Math.round((SL.taken / SL.total) * 100));
 
-  // ── Ticker ────────────────────────────────────────────────
+  // Ticker
   if (remaining > 0) {
-    const msg = `✦ ${P.name} 限額開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 額滿截止 ✦ ${P.name} 限額開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 額滿截止 ✦ `;
+    const msg = `✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ `;
     document.getElementById('ticker-bar').style.display = '';
     document.getElementById('ticker-text').innerHTML = `<span>${msg}</span><span>${msg}</span>`;
   }
 
-  // ── Nav ───────────────────────────────────────────────────
+  // Nav
   document.getElementById('nav-logo').textContent  = P.name;
-  document.getElementById('nav-slots').textContent = isFull
-    ? '名額已滿・候補中'
-    : `剩 ${remaining} ${SL.unit}名額`;
+  document.getElementById('nav-slots').textContent = isFull ? '名額已滿・候補中' : `剩 ${remaining} ${SL.unit}名額`;
 
-  // ── Hero ──────────────────────────────────────────────────
+  // Hero
   document.getElementById('hero-badge').textContent = P.badge;
   document.getElementById('hero-h1').textContent    = P.headline;
   document.getElementById('hero-sub').textContent   = P.subtext;
@@ -176,7 +267,7 @@
     g.style.display = ''; g.textContent = P.cta_sub; g.href = P.demo_url;
   }
 
-  // ── Social proof ──────────────────────────────────────────
+  // Social proof
   if (C.social_proof?.count) {
     document.getElementById('social-row').style.display = 'flex';
     const colors = ['#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899'];
@@ -185,20 +276,19 @@
     names.forEach((n,i) => {
       av.innerHTML += `<div class="av" style="background:${colors[i]}22;color:${colors[i]}">${n}</div>`;
     });
-    document.getElementById('social-text').textContent =
-      `${C.social_proof.count} ${C.social_proof.unit}`;
+    document.getElementById('social-text').textContent = `${C.social_proof.count} ${C.social_proof.unit}`;
   }
 
-  // ── Slot bar ──────────────────────────────────────────────
-  document.getElementById('slot-left').textContent  = `已預約 ${SL.taken} ${SL.unit}`;
+  // Slot bar
+  document.getElementById('slot-left').textContent  = `已使用 ${SL.taken} ${SL.unit}`;
   document.getElementById('slot-right').textContent = `剩 ${remaining} ${SL.unit}`;
   setTimeout(() => { document.getElementById('slot-fill').style.width = pct + '%'; }, 300);
   document.getElementById('slot-urgency').textContent =
-    remaining <= 3  ? `🔴 最後 ${remaining} 名！` :
-    remaining <= 8  ? `🔥 快滿了！` :
-    pct >= 60       ? `已搶訂 ${pct}%` : `開放中`;
+    remaining <= 1  ? `🔴 最後 ${remaining} 名！` :
+    remaining <= 2  ? `🔥 快滿了！` :
+    pct >= 50       ? `已使用 ${pct}%` : `開放中`;
 
-  // ── Pain cards ────────────────────────────────────────────
+  // Pain cards
   C.pains.forEach(p => {
     document.getElementById('pain-grid').innerHTML += `
       <div class="card">
@@ -208,7 +298,7 @@
       </div>`;
   });
 
-  // ── Feature cards ─────────────────────────────────────────
+  // Feature cards
   C.features.forEach(f => {
     document.getElementById('feature-grid').innerHTML += `
       <div class="card">
@@ -218,7 +308,24 @@
       </div>`;
   });
 
-  // ── Toast helper ──────────────────────────────────────────
+  // Founder section
+  if (FD?.enabled) {
+    document.getElementById('founder-section').style.display = '';
+    document.getElementById('founder-divider').style.display = '';
+    const avatarHtml = FD.image
+      ? `<img src="${FD.image}" alt="${FD.name}" />`
+      : `👨‍💻`;
+    document.getElementById('founder-card').innerHTML = `
+      <div class="founder-avatar">${avatarHtml}</div>
+      <div class="founder-body">
+        <div class="founder-name">${FD.name}</div>
+        <div class="founder-role">${FD.age}</div>
+        <div class="founder-story">${FD.story}</div>
+        ${FD.image ? `<p class="founder-img-caption">↑ 實際工作流架構截圖</p>` : ''}
+      </div>`;
+  }
+
+  // Toast
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -226,14 +333,13 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // ── Form 渲染 ─────────────────────────────────────────────
+  // Form
   function renderForm(isWaitlist) {
     const card = document.getElementById('form-card');
-    const cfg  = isWaitlist ? WL : C.form;
     card.innerHTML = `
       ${isWaitlist ? '<div style="font-size:38px;margin-bottom:10px">🔔</div>' : ''}
       <div class="form-title">${isWaitlist ? WL.title : C.form.title}</div>
-      <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，名額確認後 24 小時內通知你。'}</div>
+      <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，我會在 24 小時內親自聯絡你。'}</div>
       <div class="form-row">
         <input class="form-input" id="f-input" type="text"
           placeholder="${isWaitlist ? WL.placeholder : C.form.placeholder}"
@@ -242,7 +348,7 @@
           ${isWaitlist ? WL.button : C.form.button}
         </button>
       </div>
-      <p class="form-privacy">${isWaitlist ? WL.note : C.form.privacy}</p>`;
+      ${C.form.privacy ? `<p class="form-privacy">${C.form.privacy}</p>` : ''}`;
 
     document.getElementById('f-btn').addEventListener('click', () => handleSubmit(isWaitlist));
     document.getElementById('f-input').addEventListener('keydown', e => {
@@ -250,24 +356,17 @@
     });
   }
 
-  // ── 送出表單 ──────────────────────────────────────────────
   async function handleSubmit(isWaitlist) {
     const input = document.getElementById('f-input');
     const val   = input.value.trim();
-    if (!val) {
-      input.style.borderColor = '#ef4444';
-      input.focus();
-      return;
-    }
+    if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
     const btn = document.getElementById('f-btn');
     btn.textContent = '送出中...';
     btn.disabled = true;
 
     const { error } = await sb.from('leads').insert({
-      param_key:   paramKey,
-      contact:     val,
-      utm_source:  utmSrc,
-      utm_campaign: utmCamp,
+      param_key: paramKey, contact: val,
+      utm_source: utmSrc, utm_campaign: utmCamp,
       is_waitlist: isWaitlist,
     });
 
@@ -277,11 +376,9 @@
       btn.disabled = false;
       return;
     }
-
     renderThankyou(isWaitlist);
   }
 
-  // ── 感謝頁 ────────────────────────────────────────────────
   function renderThankyou(isWaitlist) {
     document.getElementById('form-card').innerHTML = `
       <div class="ty">
@@ -296,14 +393,12 @@
       </div>`;
   }
 
-  // ── 初始渲染表單 ──────────────────────────────────────────
   renderForm(isFull);
 
-  // ── Footer ────────────────────────────────────────────────
   document.getElementById('footer').textContent =
-    `© ${new Date().getFullYear()} ${P.name} · 隱私保護`;
+    `© ${new Date().getFullYear()} ${P.name} · 由 Isaac 獨立開發`;
 
-  // ── 追蹤代碼 ──────────────────────────────────────────────
+  // Tracking
   if (C.tracking?.ga4) {
     const s = document.createElement('script');
     s.src = `https://www.googletagmanager.com/gtag/js?id=${C.tracking.ga4}`;
@@ -312,16 +407,9 @@
     s2.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${C.tracking.ga4}');`;
     document.head.appendChild(s2);
   }
-  if (C.tracking?.fb_pixel) {
-    const s = document.createElement('script');
-    s.textContent = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${C.tracking.fb_pixel}');fbq('track','PageView');`;
-    document.head.appendChild(s);
-  }
 
-  // ── Ready ─────────────────────────────────────────────────
   document.body.classList.add('ready');
 
-  // ── Global helpers ────────────────────────────────────────
   window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
   window.doShare = () => navigator.share?.({ title: P.name, text: P.tagline, url: location.href });
   window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => showToast('連結已複製！'));
