@@ -7,7 +7,7 @@ window.CONFIG = {
 
   // ── Supabase 連線 ─────────────────────────────────────────
   supabase: {
-    url:      "https://hquzczhzcoygnmninemvp.supabase.co",
+    url:      "https://hquzchzcoygnmninemvp.supabase.co",
     anon_key: "sb_publishable_30l6ZM9rxe2np5ApCbiHIA_jyAmD1Ix",
   },
 
