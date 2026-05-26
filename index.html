@@ -5,74 +5,156 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="page-title">載入中...</title>
   <meta id="meta-desc" name="description" content="" />
-  <meta id="og-title"  property="og:title"       content="" />
-  <meta id="og-desc"   property="og:description"  content="" />
+  <meta id="og-title" property="og:title" content="" />
+  <meta id="og-desc"  property="og:description" content="" />
   <meta property="og:type" content="website" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { opacity: 0; transition: opacity .2s; }
-    body.ready { opacity: 1; }
+    body { opacity:0; transition:opacity .2s; }
+    body.ready { opacity:1; }
 
     .error-toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: #ef4444; color: #fff; font-size: 13px; font-weight: 600;
-      padding: 10px 20px; border-radius: 100px;
-      opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 999;
+      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+      background:#ef4444; color:#fff; font-size:13px; font-weight:600;
+      padding:10px 20px; border-radius:100px;
+      opacity:0; pointer-events:none; transition:opacity .3s; z-index:999;
     }
-    .error-toast.show { opacity: 1; }
+    .error-toast.show { opacity:1; }
 
-    /* ── Demo 比較區塊 ─────────────────────────────── */
-    .demo-section { padding: 0 24px 48px; }
-    .demo-title { text-align: center; font-size: 13px; font-weight: 600; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 16px; }
-    .compare-table {
-      border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
-      width: 100%;
+    /* ── GIF Demo 區塊 ── */
+    .demo-visual {
+      margin: 0 24px 40px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg2);
     }
+    .demo-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text3);
+      padding: 14px 16px 10px;
+    }
+    .demo-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--border);
+    }
+    .demo-side {
+      padding: 16px;
+    }
+    .demo-side:first-child { border-right: 1px solid var(--border); }
+    .demo-side-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .demo-side-label.human { color: #ef4444; }
+    .demo-side-label.ai    { color: #22c55e; }
+    .chat-bubble {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .chat-bubble.ai-reply {
+      background: rgba(212,255,71,.06);
+      border-color: rgba(212,255,71,.2);
+      color: var(--text);
+    }
+    .chat-bubble .time {
+      font-size: 10px;
+      color: var(--text3);
+      margin-top: 4px;
+    }
+    .typing-dots span {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin: 0 2px;
+      animation: blink 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .2s; }
+    .typing-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+    .demo-result {
+      margin: 0 16px 14px;
+      background: rgba(34,197,94,.06);
+      border: 1px solid rgba(34,197,94,.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── 稀缺理由 ── */
+    .slot-reason {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* ── Risk reversal microcopy ── */
+    .form-microcopy {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .form-microcopy span::before { content: "✓ "; color: #22c55e; }
+
+    /* ── Compare table ── */
+    .compare-table { width: 100%; border-collapse: collapse; }
     .compare-head {
       display: grid; grid-template-columns: 1fr 1fr 1fr;
       background: var(--bg3); border-bottom: 1px solid var(--border);
     }
-    .compare-head div {
-      padding: 10px 14px; font-size: 12px; font-weight: 700;
-      color: var(--text2); letter-spacing: .03em;
-    }
+    .compare-head div { padding: 10px 14px; font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; }
     .compare-head div:not(:last-child) { border-right: 1px solid var(--border); }
     .compare-head .col-ai { color: var(--accent); }
-    .compare-row {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      border-bottom: 1px solid var(--border);
-    }
+    .compare-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
     .compare-row:last-child { border-bottom: none; }
-    .compare-row div {
-      padding: 11px 14px; font-size: 12.5px; color: var(--text2); line-height: 1.5;
-    }
+    .compare-row div { padding: 11px 14px; font-size: 12.5px; color: var(--text2); line-height: 1.5; }
     .compare-row div:not(:last-child) { border-right: 1px solid var(--border); }
     .compare-row .task { color: var(--text); font-weight: 500; }
     .compare-row .col-human { color: #ef4444; }
     .compare-row .col-ai { color: #22c55e; font-weight: 600; }
 
-    /* ── Founder 區塊 ──────────────────────────────── */
-    .founder-section { padding: 48px 24px; }
-    .founder-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 28px 24px;
-      display: flex; gap: 20px; align-items: flex-start;
-    }
-    .founder-avatar {
-      width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
-      background: var(--accent-dim); border: 2px solid var(--accent-border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; overflow: hidden;
-    }
+    /* ── Founder ── */
+    .founder-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; gap: 20px; align-items: flex-start; }
+    .founder-avatar { width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0; background: var(--accent-dim); border: 2px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-size: 26px; overflow: hidden; }
     .founder-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .founder-body {}
     .founder-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
     .founder-role { font-size: 11.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; letter-spacing: .03em; }
     .founder-story { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
-    .founder-img-caption { font-size: 11px; color: var(--text3); margin-top: 10px; }
-    .workflow-img {
-      width: 100%; border-radius: 10px; margin-top: 14px;
-      border: 1px solid var(--border); display: block;
+
+    @media (max-width: 480px) {
+      .demo-split { grid-template-columns: 1fr; }
+      .demo-side:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .hero { padding: 44px 20px 36px; }
+      .form-row { flex-direction: column; }
+      .slot-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .form-card { padding: 26px 18px; }
     }
   </style>
 </head>
@@ -97,10 +179,7 @@
 <!-- ③ Hero -->
 <div class="wrap">
   <div class="hero">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span id="hero-badge"></span>
-    </div>
+    <div class="hero-badge"><span class="badge-dot"></span><span id="hero-badge"></span></div>
     <h1 id="hero-h1"></h1>
     <p class="hero-sub" id="hero-sub"></p>
     <div class="cta-row">
@@ -114,7 +193,43 @@
   </div>
 </div>
 
-<!-- ④ Slot bar -->
+<!-- ④ Demo Visual (LINE對話示範) -->
+<div class="wrap">
+  <div class="demo-visual">
+    <div class="demo-label">👇 實際運作示範 — 你的 AI 員工長這樣工作</div>
+    <div class="demo-split">
+      <div class="demo-side">
+        <div class="demo-side-label human">👤 客人傳來的訊息</div>
+        <div class="chat-bubble">
+          你好 請問明天下午有空嗎 我想預約剪髮
+          <div class="time">下午 2:34</div>
+        </div>
+        <div class="chat-bubble">
+          喔對了 我想要稍微燙一下 不知道適合什麼髮型
+          <div class="time">下午 2:35</div>
+        </div>
+      </div>
+      <div class="demo-side">
+        <div class="demo-side-label ai">🤖 AI 即時回覆（3秒內）</div>
+        <div class="chat-bubble ai-reply">
+          您好！明天下午 2:00、3:30、5:00 都有空位 🗓<br>
+          依您的需求，我推薦「韓系波浪燙」，自然不挑臉型！<br>
+          請問您偏好哪個時段呢？
+          <div class="time">下午 2:34 ✓✓</div>
+        </div>
+        <div class="typing-dots" id="typing" style="padding:6px 0">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+    <div class="demo-result">
+      <span>✅</span>
+      <span>預約資料已自動寫入 Google 行事曆 · 客戶資料同步更新至 CRM · 全程無需人工介入</span>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ Slot bar -->
 <div class="wrap">
   <div class="slot-wrap">
     <div class="slot-card">
@@ -123,9 +238,8 @@
           <span id="slot-left"></span>
           <span class="slot-taken" id="slot-right"></span>
         </div>
-        <div class="slot-bar">
-          <div class="slot-fill" id="slot-fill"></div>
-        </div>
+        <div class="slot-bar"><div class="slot-fill" id="slot-fill"></div></div>
+        <div class="slot-reason" id="slot-reason"></div>
       </div>
       <div class="slot-urgency" id="slot-urgency"></div>
     </div>
@@ -134,54 +248,37 @@
 
 <div class="divider"></div>
 
-<!-- ⑤ 人類 vs AI 比較表 -->
-<div class="wrap">
-  <div class="demo-section">
-    <div class="demo-title">眼見為憑 — 同一件事，差距有多大？</div>
-    <table class="compare-table" style="border-collapse:collapse;">
-      <div class="compare-head">
-        <div>任務</div>
-        <div>👤 人工處理</div>
-        <div class="col-ai">🤖 AI 自動化</div>
-      </div>
-      <div class="compare-row">
-        <div class="task">LINE 訂單整理</div>
-        <div class="col-human">每天 1–2 小時手動複製</div>
-        <div class="col-ai">秒級自動寫入 Sheet</div>
-      </div>
-      <div class="compare-row">
-        <div class="task">客戶常見問題回覆</div>
-        <div class="col-human">客服盯著螢幕等訊息</div>
-        <div class="col-ai">24 小時即時回覆</div>
-      </div>
-      <div class="compare-row">
-        <div class="task">每週業績報表</div>
-        <div class="col-human">花 3 小時整理 Excel</div>
-        <div class="col-ai">每週一早上自動發送</div>
-      </div>
-      <div class="compare-row">
-        <div class="task">新員工交接</div>
-        <div class="col-human">教 2 週還是會出錯</div>
-        <div class="col-ai">流程固化，永不離職</div>
-      </div>
-    </table>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ⑥ Pain points -->
+<!-- ⑥ Pain -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">你有這些困擾嗎？</div>
-    <div class="sec-title">這些問題正在讓你默默虧錢</div>
+    <div class="sec-title">每天漏掉的不只是時間，是真金白銀</div>
     <div class="grid-3" id="pain-grid"></div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ⑦ Features -->
+<!-- ⑦ Compare table -->
+<div class="wrap">
+  <div class="section">
+    <div class="sec-label">眼見為憑</div>
+    <div class="sec-title">同一件事，差距有多大？</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+      <div class="compare-head">
+        <div>任務</div><div>👤 人工處理</div><div class="col-ai">🤖 AI 自動化</div>
+      </div>
+      <div class="compare-row"><div class="task">LINE 訂單整理</div><div class="col-human">每天 1–2 小時手動複製</div><div class="col-ai">秒級自動寫入 Sheet</div></div>
+      <div class="compare-row"><div class="task">客戶問題回覆</div><div class="col-human">客服盯著螢幕等訊息</div><div class="col-ai">24 小時即時回覆</div></div>
+      <div class="compare-row"><div class="task">每週業績報表</div><div class="col-human">花 3 小時整理 Excel</div><div class="col-ai">週一早上自動發送</div></div>
+      <div class="compare-row"><div class="task">新員工交接</div><div class="col-human">教 2 週還是會出錯</div><div class="col-ai">流程固化，永不離職</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ⑧ Features -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">我們怎麼解決</div>
@@ -192,227 +289,268 @@
 
 <div class="divider"></div>
 
-<!-- ⑧ Founder 信任區塊 -->
+<!-- ⑨ Founder -->
 <div class="wrap" id="founder-section" style="display:none">
-  <div class="founder-section">
+  <div class="section">
     <div class="sec-label">開發者筆記</div>
     <div class="sec-title">為什麼我在做這件事</div>
     <div class="founder-card" id="founder-card"></div>
   </div>
+  <div class="divider" style="margin:0"></div>
 </div>
 
-<div class="divider" id="founder-divider" style="display:none"></div>
-
-<!-- ⑨ Form -->
+<!-- ⑩ Form -->
 <div class="wrap" id="form-section">
   <div class="form-sec">
     <div class="form-card" id="form-card"></div>
   </div>
 </div>
 
-<!-- ⑩ Footer -->
 <footer id="footer"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script>
 (function () {
-  const C  = window.CONFIG;
-  const P  = C.product;
-  const SL = C.slots;
-  const WL = C.waitlist;
-  const TY = C.thankyou;
-  const FD = C.founder;
+  const CFG_STATIC = window.CONFIG;
+  const sb = supabase.createClient(CFG_STATIC.supabase.url, CFG_STATIC.supabase.anon_key);
 
   const params   = new URLSearchParams(location.search);
   const paramKey = params.get('p') || 'default';
-  const utmSrc   = params.get('utm_source') || '';
+  const utmSrc   = params.get('utm_source')  || '';
   const utmCamp  = params.get('utm_campaign') || '';
 
-  const sb = supabase.createClient(C.supabase.url, C.supabase.anon_key);
+  // 記錄 page_view
+  sb.from('page_views').insert({ param_key: paramKey, utm_source: utmSrc, utm_campaign: utmCamp })
+    .then(({ error }) => { if (error) console.warn('pv:', error.message); });
 
-  sb.from('page_views').insert({
-    param_key: paramKey, utm_source: utmSrc, utm_campaign: utmCamp,
-  }).then(({ error }) => { if (error) console.warn('pv:', error.message); });
-
-  document.body.setAttribute('data-theme', C.theme);
-
-  document.getElementById('page-title').textContent  = P.name + ' — ' + P.tagline;
-  document.getElementById('meta-desc').content       = P.subtext;
-  document.getElementById('og-title').content        = P.headline.replace('\n',' ');
-  document.getElementById('og-desc').content         = P.subtext;
-
-  const remaining = SL.total - SL.taken;
-  const isFull    = WL.enabled && remaining <= 0;
-  const pct       = Math.min(100, Math.round((SL.taken / SL.total) * 100));
-
-  // Ticker
-  if (remaining > 0) {
-    const msg = `✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ `;
-    document.getElementById('ticker-bar').style.display = '';
-    document.getElementById('ticker-text').innerHTML = `<span>${msg}</span><span>${msg}</span>`;
-  }
-
-  // Nav
-  document.getElementById('nav-logo').textContent  = P.name;
-  document.getElementById('nav-slots').textContent = isFull ? '名額已滿・候補中' : `剩 ${remaining} ${SL.unit}名額`;
-
-  // Hero
-  document.getElementById('hero-badge').textContent = P.badge;
-  document.getElementById('hero-h1').textContent    = P.headline;
-  document.getElementById('hero-sub').textContent   = P.subtext;
-  document.getElementById('btn-main').textContent   = isFull ? (WL.button || '加入候補') : P.cta_main;
-  if (P.cta_sub && P.demo_url) {
-    const g = document.getElementById('btn-ghost');
-    g.style.display = ''; g.textContent = P.cta_sub; g.href = P.demo_url;
-  }
-
-  // Social proof
-  if (C.social_proof?.count) {
-    document.getElementById('social-row').style.display = 'flex';
-    const colors = ['#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899'];
-    const names  = ['王','陳','李','張','林'];
-    const av = document.getElementById('avatars');
-    names.forEach((n,i) => {
-      av.innerHTML += `<div class="av" style="background:${colors[i]}22;color:${colors[i]}">${n}</div>`;
-    });
-    document.getElementById('social-text').textContent = `${C.social_proof.count} ${C.social_proof.unit}`;
-  }
-
-  // Slot bar
-  document.getElementById('slot-left').textContent  = `已使用 ${SL.taken} ${SL.unit}`;
-  document.getElementById('slot-right').textContent = `剩 ${remaining} ${SL.unit}`;
-  setTimeout(() => { document.getElementById('slot-fill').style.width = pct + '%'; }, 300);
-  document.getElementById('slot-urgency').textContent =
-    remaining <= 1  ? `🔴 最後 ${remaining} 名！` :
-    remaining <= 2  ? `🔥 快滿了！` :
-    pct >= 50       ? `已使用 ${pct}%` : `開放中`;
-
-  // Pain cards
-  C.pains.forEach(p => {
-    document.getElementById('pain-grid').innerHTML += `
-      <div class="card">
-        <div class="card-icon">${p.icon}</div>
-        <h3>${p.title}</h3>
-        <p>${p.desc}</p>
-      </div>`;
-  });
-
-  // Feature cards
-  C.features.forEach(f => {
-    document.getElementById('feature-grid').innerHTML += `
-      <div class="card">
-        <div class="card-icon">${f.icon}</div>
-        <h3>${f.title}</h3>
-        <p>${f.desc}</p>
-      </div>`;
-  });
-
-  // Founder section
-  if (FD?.enabled) {
-    document.getElementById('founder-section').style.display = '';
-    document.getElementById('founder-divider').style.display = '';
-    const avatarHtml = FD.image
-      ? `<img src="${FD.image}" alt="${FD.name}" />`
-      : `👨‍💻`;
-    document.getElementById('founder-card').innerHTML = `
-      <div class="founder-avatar">${avatarHtml}</div>
-      <div class="founder-body">
-        <div class="founder-name">${FD.name}</div>
-        <div class="founder-role">${FD.age}</div>
-        <div class="founder-story">${FD.story}</div>
-        ${FD.image ? `<p class="founder-img-caption">↑ 實際工作流架構截圖</p>` : ''}
-      </div>`;
-  }
-
-  // Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // Form
-  function renderForm(isWaitlist) {
-    const card = document.getElementById('form-card');
-    card.innerHTML = `
-      ${isWaitlist ? '<div style="font-size:38px;margin-bottom:10px">🔔</div>' : ''}
-      <div class="form-title">${isWaitlist ? WL.title : C.form.title}</div>
-      <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，我會在 24 小時內親自聯絡你。'}</div>
-      <div class="form-row">
-        <input class="form-input" id="f-input" type="text"
-          placeholder="${isWaitlist ? WL.placeholder : C.form.placeholder}"
-          autocomplete="email" />
-        <button class="form-btn" id="f-btn">
-          ${isWaitlist ? WL.button : C.form.button}
-        </button>
-      </div>
-      ${C.form.privacy ? `<p class="form-privacy">${C.form.privacy}</p>` : ''}`;
-
-    document.getElementById('f-btn').addEventListener('click', () => handleSubmit(isWaitlist));
-    document.getElementById('f-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleSubmit(isWaitlist);
-    });
-  }
-
-  async function handleSubmit(isWaitlist) {
-    const input = document.getElementById('f-input');
-    const val   = input.value.trim();
-    if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
-    const btn = document.getElementById('f-btn');
-    btn.textContent = '送出中...';
-    btn.disabled = true;
-
-    const { error } = await sb.from('leads').insert({
-      param_key: paramKey, contact: val,
-      utm_source: utmSrc, utm_campaign: utmCamp,
-      is_waitlist: isWaitlist,
-    });
-
-    if (error) {
-      showToast('送出失敗，請再試一次');
-      btn.textContent = isWaitlist ? WL.button : C.form.button;
-      btn.disabled = false;
-      return;
+  // 動態從 Supabase 讀取設定，沒有則 fallback 到 config.js
+  async function loadConfig() {
+    const { data } = await sb.from('landing_configs')
+      .select('*').eq('param_key', paramKey).eq('is_active', true).single();
+    if (data) {
+      return {
+        theme:    data.theme || CFG_STATIC.theme,
+        product: {
+          name:     data.headline?.split('\n')[0] || CFG_STATIC.product.name,
+          tagline:  CFG_STATIC.product.tagline,
+          badge:    data.badge    || CFG_STATIC.product.badge,
+          headline: data.headline || CFG_STATIC.product.headline,
+          subtext:  data.subtext  || CFG_STATIC.product.subtext,
+          cta_main: data.cta_text || CFG_STATIC.product.cta_main,
+          cta_sub:  CFG_STATIC.product.cta_sub,
+          demo_url: CFG_STATIC.product.demo_url,
+        },
+        slots: {
+          total: data.slots_total || CFG_STATIC.slots.total,
+          taken: data.slots_taken || CFG_STATIC.slots.taken,
+          unit:  CFG_STATIC.slots.unit,
+        },
+        social_proof: {
+          count: data.social_proof?.split(' ')[0] || CFG_STATIC.social_proof.count,
+          unit:  data.social_proof?.split(' ').slice(1).join(' ') || CFG_STATIC.social_proof.unit,
+        },
+        pains:    (data.pains    && data.pains.length)    ? data.pains    : CFG_STATIC.pains,
+        features: (data.features && data.features.length) ? data.features : CFG_STATIC.features,
+        founder:  CFG_STATIC.founder,
+        form:     CFG_STATIC.form,
+        waitlist: CFG_STATIC.waitlist,
+        thankyou: CFG_STATIC.thankyou,
+        tracking: CFG_STATIC.tracking,
+      };
     }
-    renderThankyou(isWaitlist);
+    return CFG_STATIC;
   }
 
-  function renderThankyou(isWaitlist) {
-    document.getElementById('form-card').innerHTML = `
-      <div class="ty">
-        <div class="ty-emoji">${isWaitlist ? '🔔' : '🎉'}</div>
-        <h2>${TY.title}</h2>
-        <p>${TY.message}</p>
-        ${TY.share ? `
-        <div class="share-row">
-          <button class="share-btn" onclick="doShare()">📤 分享給朋友</button>
-          <button class="share-btn" onclick="copyUrl()">🔗 複製連結</button>
-        </div>` : ''}
-      </div>`;
+  function render(C) {
+    const P  = C.product;
+    const SL = C.slots;
+    const WL = C.waitlist;
+    const TY = C.thankyou;
+    const FD = C.founder;
+
+    document.body.setAttribute('data-theme', C.theme);
+    document.getElementById('page-title').textContent = P.name + ' — ' + P.tagline;
+    document.getElementById('meta-desc').content      = P.subtext;
+    document.getElementById('og-title').content       = P.headline?.replace('\n',' ');
+    document.getElementById('og-desc').content        = P.subtext;
+
+    const remaining = SL.total - SL.taken;
+    const isFull    = WL.enabled && remaining <= 0;
+    const pct       = Math.min(100, Math.round((SL.taken / SL.total) * 100));
+
+    // Ticker
+    if (remaining > 0) {
+      const msg = `✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ `;
+      document.getElementById('ticker-bar').style.display = '';
+      document.getElementById('ticker-text').innerHTML = `<span>${msg}</span><span>${msg}</span>`;
+    }
+
+    // Nav
+    document.getElementById('nav-logo').textContent  = P.name;
+    document.getElementById('nav-slots').textContent = isFull ? '名額已滿・候補中' : `剩 ${remaining} ${SL.unit}名額`;
+
+    // Hero — 優化一：主打防漏單/賺錢
+    document.getElementById('hero-badge').textContent = P.badge;
+    document.getElementById('hero-h1').textContent    = P.headline;
+    document.getElementById('hero-sub').textContent   = P.subtext;
+    // 優化五：利益導向 CTA
+    document.getElementById('btn-main').textContent   = isFull ? (WL.button || '加入候補') : P.cta_main;
+    if (P.cta_sub && P.demo_url) {
+      const g = document.getElementById('btn-ghost');
+      g.style.display = ''; g.textContent = P.cta_sub; g.href = P.demo_url;
+    }
+
+    // Social proof
+    if (C.social_proof?.count) {
+      document.getElementById('social-row').style.display = 'flex';
+      const colors = ['#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899'];
+      const names  = ['王','陳','李','張','林'];
+      const av = document.getElementById('avatars');
+      names.forEach((n,i) => {
+        av.innerHTML += `<div class="av" style="background:${colors[i]}22;color:${colors[i]}">${n}</div>`;
+      });
+      document.getElementById('social-text').textContent = `${C.social_proof.count} ${C.social_proof.unit}`;
+    }
+
+    // Slot bar — 優化四：加入合理化稀缺說明
+    document.getElementById('slot-left').textContent  = `已使用 ${SL.taken} ${SL.unit}`;
+    document.getElementById('slot-right').textContent = `剩 ${remaining} ${SL.unit}`;
+    setTimeout(() => { document.getElementById('slot-fill').style.width = pct + '%'; }, 300);
+    document.getElementById('slot-urgency').textContent =
+      remaining <= 1 ? `🔴 最後 ${remaining} 名！` :
+      remaining <= 2 ? `🔥 快滿了！` :
+      pct >= 50      ? `已使用 ${pct}%` : `開放中`;
+    document.getElementById('slot-reason').textContent =
+      `為確保每間企業的 AI 客製化訓練準確度，本批僅開放 ${SL.total} ${SL.unit}進行深度導入`;
+
+    // Pain cards
+    C.pains.forEach(p => {
+      document.getElementById('pain-grid').innerHTML += `
+        <div class="card">
+          <div class="card-icon">${p.icon}</div>
+          <h3>${p.title}</h3>
+          <p>${p.desc}</p>
+        </div>`;
+    });
+
+    // Feature cards
+    C.features.forEach(f => {
+      document.getElementById('feature-grid').innerHTML += `
+        <div class="card">
+          <div class="card-icon">${f.icon}</div>
+          <h3>${f.title}</h3>
+          <p>${f.desc}</p>
+        </div>`;
+    });
+
+    // Founder
+    if (FD?.enabled) {
+      document.getElementById('founder-section').style.display = '';
+      const avatarHtml = FD.image ? `<img src="${FD.image}" alt="${FD.name}" />` : `👨‍💻`;
+      document.getElementById('founder-card').innerHTML = `
+        <div class="founder-avatar">${avatarHtml}</div>
+        <div>
+          <div class="founder-name">${FD.name}</div>
+          <div class="founder-role">${FD.age}</div>
+          <div class="founder-story">${FD.story}</div>
+        </div>`;
+    }
+
+    // Toast helper
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // Form — 優化三：Risk reversal microcopy
+    function renderForm(isWaitlist) {
+      const card = document.getElementById('form-card');
+      card.innerHTML = `
+        ${isWaitlist ? '<div style="font-size:38px;margin-bottom:10px">🔔</div>' : ''}
+        <div class="form-title">${isWaitlist ? WL.title : C.form.title}</div>
+        <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，我會在 24 小時內親自聯絡你。'}</div>
+        <div class="form-row">
+          <input class="form-input" id="f-input" type="text"
+            placeholder="${isWaitlist ? WL.placeholder : C.form.placeholder}"
+            autocomplete="email" />
+          <button class="form-btn" id="f-btn">
+            ${isWaitlist ? WL.button : C.form.button}
+          </button>
+        </div>
+        <div class="form-microcopy">
+          <span>免綁信用卡</span>
+          <span>100% 免費設定測試</span>
+          <span>隨時可取消</span>
+        </div>`;
+      document.getElementById('f-btn').addEventListener('click', () => handleSubmit(isWaitlist));
+      document.getElementById('f-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleSubmit(isWaitlist);
+      });
+    }
+
+    async function handleSubmit(isWaitlist) {
+      const input = document.getElementById('f-input');
+      const val   = input.value.trim();
+      if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
+      const btn = document.getElementById('f-btn');
+      btn.textContent = '送出中...'; btn.disabled = true;
+
+      const { error } = await sb.from('leads').insert({
+        param_key: paramKey, contact: val,
+        utm_source: utmSrc, utm_campaign: utmCamp,
+        is_waitlist: isWaitlist,
+      });
+
+      if (error) {
+        showToast('送出失敗，請再試一次');
+        btn.textContent = isWaitlist ? WL.button : C.form.button;
+        btn.disabled = false; return;
+      }
+      renderThankyou(isWaitlist);
+    }
+
+    function renderThankyou(isWaitlist) {
+      document.getElementById('form-card').innerHTML = `
+        <div class="ty">
+          <div class="ty-emoji">${isWaitlist ? '🔔' : '🎉'}</div>
+          <h2>${TY.title}</h2>
+          <p>${TY.message}</p>
+          ${TY.share ? `
+          <div class="share-row">
+            <button class="share-btn" onclick="doShare()">📤 分享給朋友</button>
+            <button class="share-btn" onclick="copyUrl()">🔗 複製連結</button>
+          </div>` : ''}
+        </div>`;
+    }
+
+    renderForm(isFull);
+    document.getElementById('footer').textContent = `© ${new Date().getFullYear()} ${P.name} · 由 Isaac 獨立開發`;
+
+    // Tracking
+    if (C.tracking?.ga4) {
+      const s = document.createElement('script');
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${C.tracking.ga4}`;
+      s.async = true; document.head.appendChild(s);
+      const s2 = document.createElement('script');
+      s2.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${C.tracking.ga4}');`;
+      document.head.appendChild(s2);
+    }
+
+    document.body.classList.add('ready');
   }
 
-  renderForm(isFull);
+  window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior:'smooth' });
+  window.doShare = () => navigator.share?.({ title: window.CONFIG.product.name, text: window.CONFIG.product.tagline, url: location.href });
+  window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => {
+    const t = document.getElementById('toast');
+    t.textContent = '連結已複製！'; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  });
 
-  document.getElementById('footer').textContent =
-    `© ${new Date().getFullYear()} ${P.name} · 由 Isaac 獨立開發`;
-
-  // Tracking
-  if (C.tracking?.ga4) {
-    const s = document.createElement('script');
-    s.src = `https://www.googletagmanager.com/gtag/js?id=${C.tracking.ga4}`;
-    s.async = true; document.head.appendChild(s);
-    const s2 = document.createElement('script');
-    s2.textContent = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${C.tracking.ga4}');`;
-    document.head.appendChild(s2);
-  }
-
-  document.body.classList.add('ready');
-
-  window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
-  window.doShare = () => navigator.share?.({ title: P.name, text: P.tagline, url: location.href });
-  window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => showToast('連結已複製！'));
+  // 載入設定並渲染
+  loadConfig().then(render);
 
 })();
 </script>
