@@ -200,31 +200,30 @@
     <div class="demo-split">
       <div class="demo-side">
         <div class="demo-side-label human">👤 客人傳來的訊息</div>
-        <div class="chat-bubble">
-          你好 請問明天下午有空嗎 我想預約剪髮
+        <div class="chat-bubble" id="demo-msg1">
+          你好，我想預約這週五下午有空嗎？我想諮詢皮秒雷射
           <div class="time">下午 2:34</div>
         </div>
-        <div class="chat-bubble">
-          喔對了 我想要稍微燙一下 不知道適合什麼髮型
+        <div class="chat-bubble" id="demo-msg2">
+          收到了！那術後需要注意什麼？當天可以直接化妝嗎？
           <div class="time">下午 2:35</div>
         </div>
       </div>
       <div class="demo-side">
         <div class="demo-side-label ai">🤖 AI 即時回覆（3秒內）</div>
-        <div class="chat-bubble ai-reply">
-          您好！明天下午 2:00、3:30、5:00 都有空位 🗓<br>
-          依您的需求，我推薦「韓系波浪燙」，自然不挑臉型！<br>
-          請問您偏好哪個時段呢？
+        <div class="chat-bubble ai-reply" id="demo-reply1">
+          您好！週五下午 14:00、15:30 都有空位。依據您的需求，我已為您準備好【皮秒雷射術前須知】。請問您偏好哪個時段？
           <div class="time">下午 2:34 ✓✓</div>
         </div>
-        <div class="typing-dots" id="typing" style="padding:6px 0">
-          <span></span><span></span><span></span>
+        <div class="chat-bubble ai-reply" id="demo-reply2" style="font-size:12px;">
+          術後 24 小時內建議素顏喔！AI 已為您將【雷射術後完整保養指南】傳送至您的 LINE。
+          <div class="time">下午 2:35 ✓✓</div>
         </div>
       </div>
     </div>
     <div class="demo-result">
       <span>✅</span>
-      <span>預約資料已自動寫入 Google 行事曆 · 客戶資料同步更新至 CRM · 全程無需人工介入</span>
+      <span id="demo-result-text">預約資料已自動寫入 Google 行事曆 · 衛教資料自動推播 · 全程無需人工介入</span>
     </div>
   </div>
 </div>
@@ -268,10 +267,12 @@
       <div class="compare-head">
         <div>任務</div><div>👤 人工處理</div><div class="col-ai">🤖 AI 自動化</div>
       </div>
-      <div class="compare-row"><div class="task">LINE 訂單整理</div><div class="col-human">每天 1–2 小時手動複製</div><div class="col-ai">秒級自動寫入 Sheet</div></div>
-      <div class="compare-row"><div class="task">客戶問題回覆</div><div class="col-human">客服盯著螢幕等訊息</div><div class="col-ai">24 小時即時回覆</div></div>
-      <div class="compare-row"><div class="task">每週業績報表</div><div class="col-human">花 3 小時整理 Excel</div><div class="col-ai">週一早上自動發送</div></div>
-      <div class="compare-row"><div class="task">新員工交接</div><div class="col-human">教 2 週還是會出錯</div><div class="col-ai">流程固化，永不離職</div></div>
+      <div id="compare-rows">
+        <div class="compare-row"><div class="task">術後衛教推播</div><div class="col-human">護理師逐一打電話提醒</div><div class="col-ai">術後自動推送衛教包</div></div>
+        <div class="compare-row"><div class="task">常見問題回覆</div><div class="col-human">每天重複回答同樣問題</div><div class="col-ai">24H 標準衛教即時回覆</div></div>
+        <div class="compare-row"><div class="task">回診提醒</div><div class="col-human">人工撥打提醒電話</div><div class="col-ai">自動 LINE 訊息催回診</div></div>
+        <div class="compare-row"><div class="task">預約管理</div><div class="col-human">前台手動登記易出錯</div><div class="col-ai">線上自動寫入行事曆</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -306,6 +307,12 @@
   </div>
 </div>
 
+<!-- 隱私免責聲明 -->
+<div class="wrap">
+  <div style="padding: 16px 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); line-height: 1.8;">
+    <p>⚠️ <strong style="color:var(--text2)">重要聲明</strong>：本平台之 AI 系統僅依據院所預先提供、經醫師審核確認之標準衛教內容進行關鍵字比對與資訊傳遞，<strong>絕不涉及任何醫療診斷、療程推薦或個人化醫療建議</strong>。如有緊急醫療狀況，系統將即時轉接真人醫護人員。本服務不取代專業醫療諮詢。</p>
+  </div>
+</div>
 <footer id="footer"></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -352,6 +359,8 @@
         },
         pains:    (data.pains    && data.pains.length)    ? data.pains    : CFG_STATIC.pains,
         features: (data.features && data.features.length) ? data.features : CFG_STATIC.features,
+        demo_chat:    data.demo_chat    || null,
+        compare_rows: data.compare_rows || null,
         founder:  CFG_STATIC.founder,
         form:     CFG_STATIC.form,
         waitlist: CFG_STATIC.waitlist,
@@ -444,6 +453,27 @@
         </div>`;
     });
 
+    // Dynamic demo chat
+    if (C.demo_chat) {
+      const d = C.demo_chat;
+      if (d.msg1)    document.getElementById('demo-msg1').childNodes[0].textContent = d.msg1 + ' ';
+      if (d.msg2)    document.getElementById('demo-msg2').childNodes[0].textContent = d.msg2 + ' ';
+      if (d.reply1)  document.getElementById('demo-reply1').childNodes[0].textContent = d.reply1 + ' ';
+      if (d.reply2)  document.getElementById('demo-reply2').childNodes[0].textContent = d.reply2 + ' ';
+      if (d.result)  document.getElementById('demo-result-text').textContent = d.result;
+    }
+
+    // Dynamic compare rows
+    if (C.compare_rows && C.compare_rows.length) {
+      const cr = document.getElementById('compare-rows');
+      cr.innerHTML = C.compare_rows.map(r => `
+        <div class="compare-row">
+          <div class="task">${r.task}</div>
+          <div class="col-human">${r.human}</div>
+          <div class="col-ai">${r.ai}</div>
+        </div>`).join('');
+    }
+
     // Founder
     if (FD?.enabled) {
       document.getElementById('founder-section').style.display = '';
@@ -479,6 +509,12 @@
             ${isWaitlist ? WL.button : C.form.button}
           </button>
         </div>
+        <div style="display:flex;align-items:flex-start;gap:8px;margin:12px 0 8px;text-align:left;">
+          <input type="checkbox" id="privacy-check" style="margin-top:2px;flex-shrink:0;cursor:pointer;" />
+          <label for="privacy-check" style="font-size:11px;color:var(--text3);line-height:1.6;cursor:pointer;">
+            我已閱讀並同意 <span style="color:var(--accent);text-decoration:underline;cursor:pointer;">隱私權政策</span>，並了解所提供之聯絡資料僅供本次服務聯繫使用，不作其他商業用途。
+          </label>
+        </div>
         <div class="form-microcopy">
           <span>免綁信用卡</span>
           <span>100% 免費設定測試</span>
@@ -494,6 +530,12 @@
       const input = document.getElementById('f-input');
       const val   = input.value.trim();
       if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
+      const privacyCheck = document.getElementById('privacy-check');
+      if (privacyCheck && !privacyCheck.checked) {
+        privacyCheck.style.outline = '2px solid #ef4444';
+        showToast('請先勾選同意隱私權政策');
+        return;
+      }
       const btn = document.getElementById('f-btn');
       btn.textContent = '送出中...'; btn.disabled = true;
 
