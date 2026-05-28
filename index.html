@@ -578,6 +578,46 @@
             ${isWaitlist ? WL.button : C.form.button}
           </button>
         </div>
+        <!-- 問題一：痛點 -->
+        <div style="margin:16px 0 12px;text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
+            以下哪件事讓你最頭痛？<span style="color:#ef4444;margin-left:2px;">*</span>
+            <span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;">只能選一個，選最崩潰的那個</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="pain_choice" value="每天重複回答一樣的問題" style="accent-color:var(--accent);flex-shrink:0;" /> 每天重複回答一樣的問題
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="pain_choice" value="術後打電話提醒卻沒人接" style="accent-color:var(--accent);flex-shrink:0;" /> 術後打電話提醒卻沒人接
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="pain_choice" value="預約衝突或登記錯誤" style="accent-color:var(--accent);flex-shrink:0;" /> 預約衝突或登記錯誤
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="pain_choice" value="月底對帳報表要花一整天" style="accent-color:var(--accent);flex-shrink:0;" /> 月底對帳報表要花一整天
+            </label>
+          </div>
+        </div>
+
+        <!-- 問題二：身份 -->
+        <div style="margin:0 0 14px;text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
+            是誰叫你來看這個頁面的？<span style="color:#ef4444;margin-left:2px;">*</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="role_choice" value="我自己找到的，我是負責人" style="accent-color:var(--accent);flex-shrink:0;" /> 我自己找到的，我是負責人
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="role_choice" value="同事傳給我，我負責行政" style="accent-color:var(--accent);flex-shrink:0;" /> 同事傳給我，我負責行政
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+              <input type="radio" name="role_choice" value="朋友推薦，我在評估導入" style="accent-color:var(--accent);flex-shrink:0;" /> 朋友推薦，我在評估導入
+            </label>
+          </div>
+        </div>
+
         <div style="display:flex;align-items:flex-start;gap:8px;margin:12px 0 8px;text-align:left;">
           <input type="checkbox" id="privacy-check" style="margin-top:2px;flex-shrink:0;cursor:pointer;" />
           <label for="privacy-check" style="font-size:11px;color:var(--text3);line-height:1.6;cursor:pointer;">
@@ -599,6 +639,18 @@
       const input = document.getElementById('f-input');
       const val   = input.value.trim();
       if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
+      // 驗證痛點選擇
+      const painChoice = document.querySelector('input[name="pain_choice"]:checked')?.value || '';
+      if (!painChoice && !isWaitlist) {
+        showToast('請選擇一個最讓你頭痛的問題');
+        return;
+      }
+      // 驗證身份選擇
+      const roleChoice = document.querySelector('input[name="role_choice"]:checked')?.value || '';
+      if (!roleChoice && !isWaitlist) {
+        showToast('請選擇你的身份');
+        return;
+      }
       const privacyCheck = document.getElementById('privacy-check');
       if (privacyCheck && !privacyCheck.checked) {
         privacyCheck.style.outline = '2px solid #ef4444';
@@ -608,10 +660,16 @@
       const btn = document.getElementById('f-btn');
       btn.textContent = '送出中...'; btn.disabled = true;
 
+      const painChoice = document.querySelector('input[name="pain_choice"]:checked')?.value || '';
+      const roleChoice = document.querySelector('input[name="role_choice"]:checked')?.value || '';
       const { error } = await sb.from('leads').insert({
-        param_key: paramKey, contact: val,
-        utm_source: utmSrc, utm_campaign: utmCamp,
+        param_key:   paramKey,
+        contact:     val,
+        utm_source:  utmSrc,
+        utm_campaign: utmCamp,
         is_waitlist: isWaitlist,
+        pain_choice: painChoice,
+        role_choice: roleChoice,
       });
 
       if (error) {
