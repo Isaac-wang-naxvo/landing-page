@@ -660,8 +660,6 @@
       const btn = document.getElementById('f-btn');
       btn.textContent = '送出中...'; btn.disabled = true;
 
-      const painChoice = document.querySelector('input[name="pain_choice"]:checked')?.value || '';
-      const roleChoice = document.querySelector('input[name="role_choice"]:checked')?.value || '';
       const { error } = await sb.from('leads').insert({
         param_key:   paramKey,
         contact:     val,
