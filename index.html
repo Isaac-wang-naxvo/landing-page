@@ -148,6 +148,33 @@
     .founder-role { font-size: 11.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; letter-spacing: .03em; }
     .founder-story { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
 
+    /* ── Privacy Modal ── */
+    .privacy-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.75); z-index: 200;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .privacy-overlay.open { display: flex; }
+    .privacy-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      max-width: 520px; width: 100%;
+      max-height: 80vh; overflow-y: auto;
+      position: relative;
+    }
+    .privacy-box h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+    .privacy-box h3 { font-size: 13px; font-weight: 700; color: var(--text); margin: 16px 0 6px; }
+    .privacy-box p  { font-size: 12.5px; color: var(--text2); line-height: 1.7; margin-bottom: 8px; }
+    .privacy-close {
+      position: sticky; top: 0; float: right;
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text2); font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 100px; cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .privacy-close:hover { color: var(--text); }
+
     @media (max-width: 480px) {
       .demo-split { grid-template-columns: 1fr; }
       .demo-side:first-child { border-right: none; border-bottom: 1px solid var(--border); }
@@ -314,6 +341,48 @@
   </div>
 </div>
 <footer id="footer"></footer>
+
+<!-- Privacy Modal -->
+<div class="privacy-overlay" id="privacy-modal" onclick="closePrivacy(event)">
+  <div class="privacy-box">
+    <button class="privacy-close" onclick="document.getElementById('privacy-modal').classList.remove('open')">✕ 關閉</button>
+    <h2>🔒 隱私權政策 (Privacy Policy)</h2>
+    <p style="font-size:11px;color:var(--text3);margin-bottom:4px;">最後更新日期：2026 年 5 月 28 日</p>
+    <p>本團隊非常重視您的隱私權。本政策依據台灣《個人資料保護法》及相關法令訂定，請您詳閱以下內容：</p>
+
+    <h3>一、蒐集目的與法源依據</h3>
+    <p>本團隊基於以下特定目的蒐集您的個人資料，法源依據為《個人資料保護法》第 8 條：</p>
+    <p>1. 進行產品封測名額聯繫、系統客製化需求訪談。<br>
+       2. 系統功能通知、客服支援與問題排除。<br>
+       3. 商業與技術數據分析，以優化軟體操作體驗。</p>
+
+    <h3>二、蒐集之個人資料類別</h3>
+    <p><strong>識別類：</strong>電子郵件信箱（Email）、通訊軟體帳號（如 LINE ID）、姓名、聯絡電話。</p>
+    <p><strong>特徵類與技術數據：</strong>IP 位址、Cookie、設備資訊、網頁瀏覽與點擊紀錄（僅作系統防護與流量分析之用）。</p>
+
+    <h3>三、個人資料利用之期間、地區、對象及方式</h3>
+    <p><strong>期間：</strong>本團隊營運期間，或至您主動請求停止蒐集、處理、利用或刪除個人資料之日為止。</p>
+    <p><strong>地區：</strong>台灣地區，以及本團隊所使用之雲端伺服器、資料庫（如 Supabase 或其他跨國雲端服務）主機所在地。</p>
+    <p><strong>對象：</strong>本團隊、協助本團隊營運之第三方服務供應商（如自動化工作流系統、雲端基礎設施提供商）。本團隊承諾不會將您的個人資料任意出售、交換或出租給其他無關之團體或個人。</p>
+    <p><strong>方式：</strong>以數位檔案形式儲存於雲端資料庫，並透過自動化程式或人工方式進行合乎蒐集目的之處理與利用。</p>
+
+    <h3>四、當事人得行使之權利</h3>
+    <p>依據《個人資料保護法》第 3 條規定，您就本團隊保有之個人資料，得行使以下權利：</p>
+    <p>1. 查詢、請求閱覽或請求製給複製本。<br>
+       2. 請求補充或更正。<br>
+       3. 請求停止蒐集、處理或利用。<br>
+       4. 請求刪除。</p>
+    <p>若您欲行使上述權利，請透過本頁面表單與我們聯繫，本團隊將依法令規定期限內辦理。</p>
+
+    <h3>五、不提供個人資料所致權益之影響</h3>
+    <p>您可自由選擇是否提供個人資料。若您拒絕提供執行業務所必須之個人資料，本團隊將可能無法為您進行系統封測登記、提供後續技術支援或交付完整服務。</p>
+
+    <h3>六、隱私權政策之修訂</h3>
+    <p>本團隊保留隨時修改本隱私權政策之權利。修改後的條款將公佈於本網站上，不另行個別通知。建議您定期檢視本政策。</p>
+
+    <p style="margin-top:16px;font-size:11px;color:var(--text3);">本政策依據台灣《個人資料保護法》訂定 ｜ 適用於所有透過本平台收集名單之服務</p>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
@@ -512,7 +581,7 @@
         <div style="display:flex;align-items:flex-start;gap:8px;margin:12px 0 8px;text-align:left;">
           <input type="checkbox" id="privacy-check" style="margin-top:2px;flex-shrink:0;cursor:pointer;" />
           <label for="privacy-check" style="font-size:11px;color:var(--text3);line-height:1.6;cursor:pointer;">
-            我已閱讀並同意 <span style="color:var(--accent);text-decoration:underline;cursor:pointer;">隱私權政策</span>，並了解所提供之聯絡資料僅供本次服務聯繫使用，不作其他商業用途。
+            我已閱讀並同意 <span style="color:var(--accent);text-decoration:underline;cursor:pointer;" onclick="document.getElementById('privacy-modal').classList.add('open')">隱私權政策</span>，並了解所提供之聯絡資料僅供本次服務聯繫使用，不作其他商業用途。
           </label>
         </div>
         <div class="form-microcopy">
@@ -584,6 +653,11 @@
   }
 
   window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior:'smooth' });
+  window.closePrivacy = (e) => {
+    if (e.target === document.getElementById('privacy-modal')) {
+      document.getElementById('privacy-modal').classList.remove('open');
+    }
+  };
   window.doShare = () => navigator.share?.({ title: window.CONFIG.product.name, text: window.CONFIG.product.tagline, url: location.href });
   window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => {
     const t = document.getElementById('toast');
