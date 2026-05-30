@@ -12,123 +12,24 @@
   <style>
     body { opacity:0; transition:opacity .2s; }
     body.ready { opacity:1; }
-
-    .error-toast {
-      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-      background:#ef4444; color:#fff; font-size:13px; font-weight:600;
-      padding:10px 20px; border-radius:100px;
-      opacity:0; pointer-events:none; transition:opacity .3s; z-index:999;
-    }
+    .error-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#ef4444; color:#fff; font-size:13px; font-weight:600; padding:10px 20px; border-radius:100px; opacity:0; pointer-events:none; transition:opacity .3s; z-index:999; }
     .error-toast.show { opacity:1; }
-
-    /* ── GIF Demo 區塊 ── */
-    .demo-visual {
-      margin: 0 24px 40px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      background: var(--bg2);
-    }
-    .demo-label {
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--text3);
-      padding: 14px 16px 10px;
-    }
-    .demo-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-top: 1px solid var(--border);
-    }
-    .demo-side {
-      padding: 16px;
-    }
+    .demo-visual { margin: 0 24px 40px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--bg2); }
+    .demo-label { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); padding: 14px 16px 10px; }
+    .demo-split { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+    .demo-side { padding: 16px; }
     .demo-side:first-child { border-right: 1px solid var(--border); }
-    .demo-side-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .demo-side-label { font-size: 10.5px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
     .demo-side-label.human { color: #ef4444; }
-    .demo-side-label.ai    { color: #22c55e; }
-    .chat-bubble {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 12px;
-      color: var(--text2);
-      line-height: 1.6;
-      margin-bottom: 8px;
-    }
-    .chat-bubble.ai-reply {
-      background: rgba(212,255,71,.06);
-      border-color: rgba(212,255,71,.2);
-      color: var(--text);
-    }
-    .chat-bubble .time {
-      font-size: 10px;
-      color: var(--text3);
-      margin-top: 4px;
-    }
-    .typing-dots span {
-      display: inline-block;
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin: 0 2px;
-      animation: blink 1.2s infinite;
-    }
-    .typing-dots span:nth-child(2) { animation-delay: .2s; }
-    .typing-dots span:nth-child(3) { animation-delay: .4s; }
-    @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
-
-    .demo-result {
-      margin: 0 16px 14px;
-      background: rgba(34,197,94,.06);
-      border: 1px solid rgba(34,197,94,.2);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 11.5px;
-      color: #22c55e;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* ── 稀缺理由 ── */
-    .slot-reason {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    /* ── Risk reversal microcopy ── */
-    .form-microcopy {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .demo-side-label.ai { color: #22c55e; }
+    .chat-bubble { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+    .chat-bubble.ai-reply { background: rgba(212,255,71,.06); border-color: rgba(212,255,71,.2); color: var(--text); }
+    .chat-bubble .time { font-size: 10px; color: var(--text3); margin-top: 4px; }
+    .demo-result { margin: 0 16px 14px; background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.2); border-radius: 8px; padding: 10px 12px; font-size: 11.5px; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .slot-reason { font-size: 11px; color: var(--text3); margin-top: 6px; line-height: 1.5; }
+    .form-microcopy { font-size: 11px; color: var(--text3); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
     .form-microcopy span::before { content: "✓ "; color: #22c55e; }
-
-    /* ── Compare table ── */
-    .compare-table { width: 100%; border-collapse: collapse; }
-    .compare-head {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      background: var(--bg3); border-bottom: 1px solid var(--border);
-    }
+    .compare-head { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--bg3); border-bottom: 1px solid var(--border); }
     .compare-head div { padding: 10px 14px; font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; }
     .compare-head div:not(:last-child) { border-right: 1px solid var(--border); }
     .compare-head .col-ai { color: var(--accent); }
@@ -139,42 +40,23 @@
     .compare-row .task { color: var(--text); font-weight: 500; }
     .compare-row .col-human { color: #ef4444; }
     .compare-row .col-ai { color: #22c55e; font-weight: 600; }
-
-    /* ── Founder ── */
     .founder-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; display: flex; gap: 20px; align-items: flex-start; }
     .founder-avatar { width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0; background: var(--accent-dim); border: 2px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-size: 26px; overflow: hidden; }
     .founder-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .founder-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
     .founder-role { font-size: 11.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; letter-spacing: .03em; }
     .founder-story { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
-
-    /* ── Privacy Modal ── */
-    .privacy-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.75); z-index: 200;
-      align-items: center; justify-content: center;
-      padding: 20px;
-    }
+    .privacy-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
     .privacy-overlay.open { display: flex; }
-    .privacy-box {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; padding: 28px 24px;
-      max-width: 520px; width: 100%;
-      max-height: 80vh; overflow-y: auto;
-      position: relative;
-    }
+    .privacy-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; max-width: 520px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
     .privacy-box h2 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
     .privacy-box h3 { font-size: 13px; font-weight: 700; color: var(--text); margin: 16px 0 6px; }
-    .privacy-box p  { font-size: 12.5px; color: var(--text2); line-height: 1.7; margin-bottom: 8px; }
-    .privacy-close {
-      position: sticky; top: 0; float: right;
-      background: var(--bg3); border: 1px solid var(--border);
-      color: var(--text2); font-size: 13px; font-weight: 600;
-      padding: 6px 16px; border-radius: 100px; cursor: pointer;
-      margin-bottom: 8px;
-    }
+    .privacy-box p { font-size: 12.5px; color: var(--text2); line-height: 1.7; margin-bottom: 8px; }
+    .privacy-close { position: sticky; top: 0; float: right; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 600; padding: 6px 16px; border-radius: 100px; cursor: pointer; margin-bottom: 8px; }
     .privacy-close:hover { color: var(--text); }
-
+    .radio-option { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 12.5px; color: var(--text2); transition: border-color .15s; }
+    .radio-option:hover { border-color: var(--accent); }
+    .radio-option input { accent-color: var(--accent); flex-shrink: 0; }
     @media (max-width: 480px) {
       .demo-split { grid-template-columns: 1fr; }
       .demo-side:first-child { border-right: none; border-bottom: 1px solid var(--border); }
@@ -189,12 +71,10 @@
 
 <div class="error-toast" id="toast"></div>
 
-<!-- ① Ticker -->
 <div class="ticker-bar" id="ticker-bar" style="display:none">
   <div class="ticker-inner" id="ticker-text"></div>
 </div>
 
-<!-- ② Nav -->
 <nav class="nav">
   <div class="nav-logo" id="nav-logo"></div>
   <div class="nav-live">
@@ -203,7 +83,6 @@
   </div>
 </nav>
 
-<!-- ③ Hero -->
 <div class="wrap">
   <div class="hero">
     <div class="hero-badge"><span class="badge-dot"></span><span id="hero-badge"></span></div>
@@ -220,42 +99,28 @@
   </div>
 </div>
 
-<!-- ④ Demo Visual (LINE對話示範) -->
 <div class="wrap">
   <div class="demo-visual">
     <div class="demo-label">👇 實際運作示範 — 你的 AI 員工長這樣工作</div>
     <div class="demo-split">
       <div class="demo-side">
         <div class="demo-side-label human">👤 客人傳來的訊息</div>
-        <div class="chat-bubble" id="demo-msg1">
-          你好，我想預約這週五下午有空嗎？我想諮詢皮秒雷射
-          <div class="time">下午 2:34</div>
-        </div>
-        <div class="chat-bubble" id="demo-msg2">
-          收到了！那術後需要注意什麼？當天可以直接化妝嗎？
-          <div class="time">下午 2:35</div>
-        </div>
+        <div class="chat-bubble" id="demo-msg1"><span></span><div class="time">下午 2:34</div></div>
+        <div class="chat-bubble" id="demo-msg2"><span></span><div class="time">下午 2:35</div></div>
       </div>
       <div class="demo-side">
         <div class="demo-side-label ai">🤖 AI 即時回覆（3秒內）</div>
-        <div class="chat-bubble ai-reply" id="demo-reply1">
-          您好！週五下午 14:00、15:30 都有空位。依據您的需求，我已為您準備好【皮秒雷射術前須知】。請問您偏好哪個時段？
-          <div class="time">下午 2:34 ✓✓</div>
-        </div>
-        <div class="chat-bubble ai-reply" id="demo-reply2" style="font-size:12px;">
-          術後 24 小時內建議素顏喔！AI 已為您將【雷射術後完整保養指南】傳送至您的 LINE。
-          <div class="time">下午 2:35 ✓✓</div>
-        </div>
+        <div class="chat-bubble ai-reply" id="demo-reply1"><span></span><div class="time">下午 2:34 ✓✓</div></div>
+        <div class="chat-bubble ai-reply" id="demo-reply2" style="font-size:12px;"><span></span><div class="time">下午 2:35 ✓✓</div></div>
       </div>
     </div>
     <div class="demo-result">
       <span>✅</span>
-      <span id="demo-result-text">預約資料已自動寫入 Google 行事曆 · 衛教資料自動推播 · 全程無需人工介入</span>
+      <span id="demo-result-text"></span>
     </div>
   </div>
 </div>
 
-<!-- ⑤ Slot bar -->
 <div class="wrap">
   <div class="slot-wrap">
     <div class="slot-card">
@@ -274,7 +139,6 @@
 
 <div class="divider"></div>
 
-<!-- ⑥ Pain -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">你有這些困擾嗎？</div>
@@ -285,7 +149,6 @@
 
 <div class="divider"></div>
 
-<!-- ⑦ Compare table -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">眼見為憑</div>
@@ -294,19 +157,13 @@
       <div class="compare-head">
         <div>任務</div><div>👤 人工處理</div><div class="col-ai">🤖 AI 自動化</div>
       </div>
-      <div id="compare-rows">
-        <div class="compare-row"><div class="task">術後衛教推播</div><div class="col-human">護理師逐一打電話提醒</div><div class="col-ai">術後自動推送衛教包</div></div>
-        <div class="compare-row"><div class="task">常見問題回覆</div><div class="col-human">每天重複回答同樣問題</div><div class="col-ai">24H 標準衛教即時回覆</div></div>
-        <div class="compare-row"><div class="task">回診提醒</div><div class="col-human">人工撥打提醒電話</div><div class="col-ai">自動 LINE 訊息催回診</div></div>
-        <div class="compare-row"><div class="task">預約管理</div><div class="col-human">前台手動登記易出錯</div><div class="col-ai">線上自動寫入行事曆</div></div>
-      </div>
+      <div id="compare-rows"></div>
     </div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ⑧ Features -->
 <div class="wrap">
   <div class="section">
     <div class="sec-label">我們怎麼解決</div>
@@ -317,7 +174,6 @@
 
 <div class="divider"></div>
 
-<!-- ⑨ Founder -->
 <div class="wrap" id="founder-section" style="display:none">
   <div class="section">
     <div class="sec-label">開發者筆記</div>
@@ -327,14 +183,12 @@
   <div class="divider" style="margin:0"></div>
 </div>
 
-<!-- ⑩ Form -->
 <div class="wrap" id="form-section">
   <div class="form-sec">
     <div class="form-card" id="form-card"></div>
   </div>
 </div>
 
-<!-- 隱私免責聲明 -->
 <div class="wrap">
   <div style="padding: 16px 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); line-height: 1.8;">
     <p>⚠️ <strong style="color:var(--text2)">重要聲明</strong>：本平台之 AI 系統僅依據院所預先提供、經醫師審核確認之標準衛教內容進行關鍵字比對與資訊傳遞，<strong>絕不涉及任何醫療診斷、療程推薦或個人化醫療建議</strong>。如有緊急醫療狀況，系統將即時轉接真人醫護人員。本服務不取代專業醫療諮詢。</p>
@@ -342,44 +196,25 @@
 </div>
 <footer id="footer"></footer>
 
-<!-- Privacy Modal -->
 <div class="privacy-overlay" id="privacy-modal" onclick="closePrivacy(event)">
   <div class="privacy-box">
     <button class="privacy-close" onclick="document.getElementById('privacy-modal').classList.remove('open')">✕ 關閉</button>
     <h2>🔒 隱私權政策 (Privacy Policy)</h2>
     <p style="font-size:11px;color:var(--text3);margin-bottom:4px;">最後更新日期：2026 年 5 月 28 日</p>
     <p>本團隊非常重視您的隱私權。本政策依據台灣《個人資料保護法》及相關法令訂定，請您詳閱以下內容：</p>
-
     <h3>一、蒐集目的與法源依據</h3>
-    <p>本團隊基於以下特定目的蒐集您的個人資料，法源依據為《個人資料保護法》第 8 條：</p>
-    <p>1. 進行產品封測名額聯繫、系統客製化需求訪談。<br>
-       2. 系統功能通知、客服支援與問題排除。<br>
-       3. 商業與技術數據分析，以優化軟體操作體驗。</p>
-
+    <p>1. 進行產品封測名額聯繫、系統客製化需求訪談。<br>2. 系統功能通知、客服支援與問題排除。<br>3. 商業與技術數據分析，以優化軟體操作體驗。</p>
     <h3>二、蒐集之個人資料類別</h3>
-    <p><strong>識別類：</strong>電子郵件信箱（Email）、通訊軟體帳號（如 LINE ID）、姓名、聯絡電話。</p>
-    <p><strong>特徵類與技術數據：</strong>IP 位址、Cookie、設備資訊、網頁瀏覽與點擊紀錄（僅作系統防護與流量分析之用）。</p>
-
+    <p><strong>識別類：</strong>電子郵件信箱、LINE ID、姓名、聯絡電話。</p>
+    <p><strong>技術數據：</strong>IP 位址、Cookie、設備資訊、網頁瀏覽紀錄（僅作系統防護與流量分析）。</p>
     <h3>三、個人資料利用之期間、地區、對象及方式</h3>
-    <p><strong>期間：</strong>本團隊營運期間，或至您主動請求停止蒐集、處理、利用或刪除個人資料之日為止。</p>
-    <p><strong>地區：</strong>台灣地區，以及本團隊所使用之雲端伺服器、資料庫（如 Supabase 或其他跨國雲端服務）主機所在地。</p>
-    <p><strong>對象：</strong>本團隊、協助本團隊營運之第三方服務供應商（如自動化工作流系統、雲端基礎設施提供商）。本團隊承諾不會將您的個人資料任意出售、交換或出租給其他無關之團體或個人。</p>
-    <p><strong>方式：</strong>以數位檔案形式儲存於雲端資料庫，並透過自動化程式或人工方式進行合乎蒐集目的之處理與利用。</p>
-
+    <p>本團隊營運期間，台灣地區及本團隊使用之雲端服務（如 Supabase）所在地。不會將您的資料出售、交換或出租給無關之個人或團體。</p>
     <h3>四、當事人得行使之權利</h3>
-    <p>依據《個人資料保護法》第 3 條規定，您就本團隊保有之個人資料，得行使以下權利：</p>
-    <p>1. 查詢、請求閱覽或請求製給複製本。<br>
-       2. 請求補充或更正。<br>
-       3. 請求停止蒐集、處理或利用。<br>
-       4. 請求刪除。</p>
-    <p>若您欲行使上述權利，請來信 <strong style="color:var(--text)">isaac.naxvo@gmail.com</strong>，本團隊將依法令規定期限內辦理。</p>
-
+    <p>您可行使查詢、閱覽、補充更正、停止蒐集、刪除等權利。請來信 <strong style="color:var(--text)">isaac.naxvo@gmail.com</strong>。</p>
     <h3>五、不提供個人資料所致權益之影響</h3>
-    <p>您可自由選擇是否提供個人資料。若您拒絕提供執行業務所必須之個人資料，本團隊將可能無法為您進行系統封測登記、提供後續技術支援或交付完整服務。</p>
-
+    <p>若您拒絕提供必要個人資料，本團隊將可能無法為您進行系統封測登記或提供完整服務。</p>
     <h3>六、隱私權政策之修訂</h3>
-    <p>本團隊保留隨時修改本隱私權政策之權利。修改後的條款將公佈於本網站上，不另行個別通知。建議您定期檢視本政策。</p>
-
+    <p>本團隊保留隨時修改本政策之權利，修改後條款將公佈於本網站，不另行個別通知。</p>
     <p style="margin-top:16px;font-size:11px;color:var(--text3);">本政策依據台灣《個人資料保護法》訂定 ｜ 適用於所有透過本平台收集名單之服務</p>
   </div>
 </div>
@@ -396,17 +231,15 @@
   const utmSrc   = params.get('utm_source')  || '';
   const utmCamp  = params.get('utm_campaign') || '';
 
-  // 記錄 page_view
   sb.from('page_views').insert({ param_key: paramKey, utm_source: utmSrc, utm_campaign: utmCamp })
     .then(({ error }) => { if (error) console.warn('pv:', error.message); });
 
-  // 動態從 Supabase 讀取設定，沒有則 fallback 到 config.js
   async function loadConfig() {
     const { data } = await sb.from('landing_configs')
       .select('*').eq('param_key', paramKey).eq('is_active', true).single();
     if (data) {
       return {
-        theme:    data.theme || CFG_STATIC.theme,
+        theme:   data.theme || CFG_STATIC.theme,
         product: {
           name:     data.headline?.split('\n')[0] || CFG_STATIC.product.name,
           tagline:  CFG_STATIC.product.tagline,
@@ -426,10 +259,12 @@
           count: data.social_proof?.split(' ')[0] || CFG_STATIC.social_proof.count,
           unit:  data.social_proof?.split(' ').slice(1).join(' ') || CFG_STATIC.social_proof.unit,
         },
-        pains:    (data.pains    && data.pains.length)    ? data.pains    : CFG_STATIC.pains,
-        features: (data.features && data.features.length) ? data.features : CFG_STATIC.features,
+        pains:        (data.pains    && data.pains.length)    ? data.pains    : CFG_STATIC.pains,
+        features:     (data.features && data.features.length) ? data.features : CFG_STATIC.features,
         demo_chat:    data.demo_chat    || null,
         compare_rows: data.compare_rows || null,
+        pain_options: (data.pain_options && data.pain_options.length) ? data.pain_options : (CFG_STATIC.form?.pain_options || []),
+        role_options: (data.role_options && data.role_options.length) ? data.role_options : (CFG_STATIC.form?.role_options || []),
         founder:  CFG_STATIC.founder,
         form:     CFG_STATIC.form,
         waitlist: CFG_STATIC.waitlist,
@@ -437,7 +272,11 @@
         tracking: CFG_STATIC.tracking,
       };
     }
-    return CFG_STATIC;
+    return {
+      ...CFG_STATIC,
+      pain_options: CFG_STATIC.form?.pain_options || [],
+      role_options: CFG_STATIC.form?.role_options || [],
+    };
   }
 
   function render(C) {
@@ -457,29 +296,24 @@
     const isFull    = WL.enabled && remaining <= 0;
     const pct       = Math.min(100, Math.round((SL.taken / SL.total) * 100));
 
-    // Ticker
     if (remaining > 0) {
       const msg = `✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ ${P.name} 封測開放 ✦ 僅剩 ${remaining} ${SL.unit}名額 ✦ 免費試用 ✦ `;
       document.getElementById('ticker-bar').style.display = '';
       document.getElementById('ticker-text').innerHTML = `<span>${msg}</span><span>${msg}</span>`;
     }
 
-    // Nav
     document.getElementById('nav-logo').textContent  = P.name;
     document.getElementById('nav-slots').textContent = isFull ? '名額已滿・候補中' : `剩 ${remaining} ${SL.unit}名額`;
-
-    // Hero — 優化一：主打防漏單/賺錢
     document.getElementById('hero-badge').textContent = P.badge;
     document.getElementById('hero-h1').textContent    = P.headline;
     document.getElementById('hero-sub').textContent   = P.subtext;
-    // 優化五：利益導向 CTA
     document.getElementById('btn-main').textContent   = isFull ? (WL.button || '加入候補') : P.cta_main;
+
     if (P.cta_sub && P.demo_url) {
       const g = document.getElementById('btn-ghost');
       g.style.display = ''; g.textContent = P.cta_sub; g.href = P.demo_url;
     }
 
-    // Social proof
     if (C.social_proof?.count) {
       document.getElementById('social-row').style.display = 'flex';
       const colors = ['#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899'];
@@ -491,7 +325,6 @@
       document.getElementById('social-text').textContent = `${C.social_proof.count} ${C.social_proof.unit}`;
     }
 
-    // Slot bar — 優化四：加入合理化稀缺說明
     document.getElementById('slot-left').textContent  = `已使用 ${SL.taken} ${SL.unit}`;
     document.getElementById('slot-right').textContent = `剩 ${remaining} ${SL.unit}`;
     setTimeout(() => { document.getElementById('slot-fill').style.width = pct + '%'; }, 300);
@@ -502,40 +335,27 @@
     document.getElementById('slot-reason').textContent =
       `為確保每間企業的 AI 客製化訓練準確度，本批僅開放 ${SL.total} ${SL.unit}進行深度導入`;
 
-    // Pain cards
     C.pains.forEach(p => {
-      document.getElementById('pain-grid').innerHTML += `
-        <div class="card">
-          <div class="card-icon">${p.icon}</div>
-          <h3>${p.title}</h3>
-          <p>${p.desc}</p>
-        </div>`;
+      document.getElementById('pain-grid').innerHTML += `<div class="card"><div class="card-icon">${p.icon}</div><h3>${p.title}</h3><p>${p.desc}</p></div>`;
     });
 
-    // Feature cards
     C.features.forEach(f => {
-      document.getElementById('feature-grid').innerHTML += `
-        <div class="card">
-          <div class="card-icon">${f.icon}</div>
-          <h3>${f.title}</h3>
-          <p>${f.desc}</p>
-        </div>`;
+      document.getElementById('feature-grid').innerHTML += `<div class="card"><div class="card-icon">${f.icon}</div><h3>${f.title}</h3><p>${f.desc}</p></div>`;
     });
 
-    // Dynamic demo chat
-    if (C.demo_chat) {
-      const d = C.demo_chat;
-      if (d.msg1)    document.getElementById('demo-msg1').childNodes[0].textContent = d.msg1 + ' ';
-      if (d.msg2)    document.getElementById('demo-msg2').childNodes[0].textContent = d.msg2 + ' ';
-      if (d.reply1)  document.getElementById('demo-reply1').childNodes[0].textContent = d.reply1 + ' ';
-      if (d.reply2)  document.getElementById('demo-reply2').childNodes[0].textContent = d.reply2 + ' ';
-      if (d.result)  document.getElementById('demo-result-text').textContent = d.result;
+    // Demo chat — 從資料庫讀取
+    const dc = C.demo_chat;
+    if (dc) {
+      if (dc.msg1)   document.getElementById('demo-msg1').querySelector('span').textContent = dc.msg1;
+      if (dc.msg2)   document.getElementById('demo-msg2').querySelector('span').textContent = dc.msg2;
+      if (dc.reply1) document.getElementById('demo-reply1').querySelector('span').textContent = dc.reply1;
+      if (dc.reply2) document.getElementById('demo-reply2').querySelector('span').textContent = dc.reply2;
+      if (dc.result) document.getElementById('demo-result-text').textContent = dc.result;
     }
 
-    // Dynamic compare rows
+    // Compare rows — 從資料庫讀取
     if (C.compare_rows && C.compare_rows.length) {
-      const cr = document.getElementById('compare-rows');
-      cr.innerHTML = C.compare_rows.map(r => `
+      document.getElementById('compare-rows').innerHTML = C.compare_rows.map(r => `
         <div class="compare-row">
           <div class="task">${r.task}</div>
           <div class="col-human">${r.human}</div>
@@ -543,7 +363,6 @@
         </div>`).join('');
     }
 
-    // Founder
     if (FD?.enabled) {
       document.getElementById('founder-section').style.display = '';
       const avatarHtml = FD.image ? `<img src="${FD.image}" alt="${FD.name}" />` : `👨‍💻`;
@@ -556,17 +375,39 @@
         </div>`;
     }
 
-    // Toast helper
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg; t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 3000);
     }
 
-    // Form — 優化三：Risk reversal microcopy
+    // renderForm — 問卷選項完全從資料庫讀取
     function renderForm(isWaitlist) {
-      const card = document.getElementById('form-card');
-      card.innerHTML = `
+      const painOpts = C.pain_options || [];
+      const roleOpts = C.role_options || [];
+
+      const painBlock = (!isWaitlist && painOpts.length) ? `
+        <div style="margin:16px 0 12px;text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
+            以下哪件事讓你最頭痛？<span style="color:#ef4444;margin-left:2px;">*</span>
+            <span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;">只能選一個，選最崩潰的那個</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${painOpts.map(o => `<label class="radio-option"><input type="radio" name="pain_choice" value="${o.value}" /> ${o.label}</label>`).join('')}
+          </div>
+        </div>` : '';
+
+      const roleBlock = (!isWaitlist && roleOpts.length) ? `
+        <div style="margin:0 0 14px;text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
+            是誰叫你來看這個頁面的？<span style="color:#ef4444;margin-left:2px;">*</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${roleOpts.map(o => `<label class="radio-option"><input type="radio" name="role_choice" value="${o.value}" /> ${o.label}</label>`).join('')}
+          </div>
+        </div>` : '';
+
+      document.getElementById('form-card').innerHTML = `
         ${isWaitlist ? '<div style="font-size:38px;margin-bottom:10px">🔔</div>' : ''}
         <div class="form-title">${isWaitlist ? WL.title : C.form.title}</div>
         <div class="form-sub">${isWaitlist ? WL.subtitle : '填入聯絡方式，我會在 24 小時內親自聯絡你。'}</div>
@@ -574,50 +415,10 @@
           <input class="form-input" id="f-input" type="text"
             placeholder="${isWaitlist ? WL.placeholder : C.form.placeholder}"
             autocomplete="email" />
-          <button class="form-btn" id="f-btn">
-            ${isWaitlist ? WL.button : C.form.button}
-          </button>
+          <button class="form-btn" id="f-btn">${isWaitlist ? WL.button : C.form.button}</button>
         </div>
-        <!-- 問題一：痛點 -->
-        <div style="margin:16px 0 12px;text-align:left;">
-          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
-            以下哪件事讓你最頭痛？<span style="color:#ef4444;margin-left:2px;">*</span>
-            <span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;">只能選一個，選最崩潰的那個</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="pain_choice" value="每天重複回答一樣的問題" style="accent-color:var(--accent);flex-shrink:0;" /> 每天重複回答一樣的問題
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="pain_choice" value="術後打電話提醒卻沒人接" style="accent-color:var(--accent);flex-shrink:0;" /> 術後打電話提醒卻沒人接
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="pain_choice" value="預約衝突或登記錯誤" style="accent-color:var(--accent);flex-shrink:0;" /> 預約衝突或登記錯誤
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="pain_choice" value="月底對帳報表要花一整天" style="accent-color:var(--accent);flex-shrink:0;" /> 月底對帳報表要花一整天
-            </label>
-          </div>
-        </div>
-
-        <!-- 問題二：身份 -->
-        <div style="margin:0 0 14px;text-align:left;">
-          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">
-            是誰叫你來看這個頁面的？<span style="color:#ef4444;margin-left:2px;">*</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="role_choice" value="我自己找到的，我是負責人" style="accent-color:var(--accent);flex-shrink:0;" /> 我自己找到的，我是負責人
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="role_choice" value="同事傳給我，我負責行政" style="accent-color:var(--accent);flex-shrink:0;" /> 同事傳給我，我負責行政
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .15s;" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-              <input type="radio" name="role_choice" value="朋友推薦，我在評估導入" style="accent-color:var(--accent);flex-shrink:0;" /> 朋友推薦，我在評估導入
-            </label>
-          </div>
-        </div>
-
+        ${painBlock}
+        ${roleBlock}
         <div style="display:flex;align-items:flex-start;gap:8px;margin:12px 0 8px;text-align:left;">
           <input type="checkbox" id="privacy-check" style="margin-top:2px;flex-shrink:0;cursor:pointer;" />
           <label for="privacy-check" style="font-size:11px;color:var(--text3);line-height:1.6;cursor:pointer;">
@@ -625,49 +426,44 @@
           </label>
         </div>
         <div class="form-microcopy">
-          <span>免綁信用卡</span>
-          <span>100% 免費設定測試</span>
-          <span>隨時可取消</span>
+          <span>免綁信用卡</span><span>100% 免費設定測試</span><span>隨時可取消</span>
         </div>`;
+
       document.getElementById('f-btn').addEventListener('click', () => handleSubmit(isWaitlist));
-      document.getElementById('f-input').addEventListener('keydown', e => {
-        if (e.key === 'Enter') handleSubmit(isWaitlist);
-      });
+      document.getElementById('f-input').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(isWaitlist); });
     }
 
     async function handleSubmit(isWaitlist) {
       const input = document.getElementById('f-input');
       const val   = input.value.trim();
       if (!val) { input.style.borderColor = '#ef4444'; input.focus(); return; }
-      // 驗證痛點選擇
+
+      const painOpts = C.pain_options || [];
+      const roleOpts = C.role_options || [];
       const painChoice = document.querySelector('input[name="pain_choice"]:checked')?.value || '';
-      if (!painChoice && !isWaitlist) {
-        showToast('請選擇一個最讓你頭痛的問題');
-        return;
-      }
-      // 驗證身份選擇
       const roleChoice = document.querySelector('input[name="role_choice"]:checked')?.value || '';
-      if (!roleChoice && !isWaitlist) {
-        showToast('請選擇你的身份');
-        return;
-      }
+
+      if (!isWaitlist && painOpts.length && !painChoice) { showToast('請選擇一個最讓你頭痛的問題'); return; }
+      if (!isWaitlist && roleOpts.length && !roleChoice) { showToast('請選擇你的身份'); return; }
+
       const privacyCheck = document.getElementById('privacy-check');
       if (privacyCheck && !privacyCheck.checked) {
         privacyCheck.style.outline = '2px solid #ef4444';
         showToast('請先勾選同意隱私權政策');
         return;
       }
+
       const btn = document.getElementById('f-btn');
       btn.textContent = '送出中...'; btn.disabled = true;
 
       const { error } = await sb.from('leads').insert({
-        param_key:   paramKey,
-        contact:     val,
-        utm_source:  utmSrc,
+        param_key:    paramKey,
+        contact:      val,
+        utm_source:   utmSrc,
         utm_campaign: utmCamp,
-        is_waitlist: isWaitlist,
-        pain_choice: painChoice,
-        role_choice: roleChoice,
+        is_waitlist:  isWaitlist,
+        pain_choice:  painChoice,
+        role_choice:  roleChoice,
       });
 
       if (error) {
@@ -684,18 +480,13 @@
           <div class="ty-emoji">${isWaitlist ? '🔔' : '🎉'}</div>
           <h2>${TY.title}</h2>
           <p>${TY.message}</p>
-          ${TY.share ? `
-          <div class="share-row">
-            <button class="share-btn" onclick="doShare()">📤 分享給朋友</button>
-            <button class="share-btn" onclick="copyUrl()">🔗 複製連結</button>
-          </div>` : ''}
+          ${TY.share ? `<div class="share-row"><button class="share-btn" onclick="doShare()">📤 分享給朋友</button><button class="share-btn" onclick="copyUrl()">🔗 複製連結</button></div>` : ''}
         </div>`;
     }
 
     renderForm(isFull);
     document.getElementById('footer').textContent = `© ${new Date().getFullYear()} ${P.name} · 由 Isaac 獨立開發`;
 
-    // Tracking
     if (C.tracking?.ga4) {
       const s = document.createElement('script');
       s.src = `https://www.googletagmanager.com/gtag/js?id=${C.tracking.ga4}`;
@@ -709,11 +500,7 @@
   }
 
   window.scrollToForm = () => document.getElementById('form-section').scrollIntoView({ behavior:'smooth' });
-  window.closePrivacy = (e) => {
-    if (e.target === document.getElementById('privacy-modal')) {
-      document.getElementById('privacy-modal').classList.remove('open');
-    }
-  };
+  window.closePrivacy = (e) => { if (e.target === document.getElementById('privacy-modal')) document.getElementById('privacy-modal').classList.remove('open'); };
   window.doShare = () => navigator.share?.({ title: window.CONFIG.product.name, text: window.CONFIG.product.tagline, url: location.href });
   window.copyUrl = () => navigator.clipboard.writeText(location.href).then(() => {
     const t = document.getElementById('toast');
@@ -721,9 +508,7 @@
     setTimeout(() => t.classList.remove('show'), 2500);
   });
 
-  // 載入設定並渲染
   loadConfig().then(render);
-
 })();
 </script>
 </body>
